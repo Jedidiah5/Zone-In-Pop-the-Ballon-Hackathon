@@ -1,0 +1,61 @@
+import AppHeader from "@/components/AppHeader";
+import AppShell from "@/components/AppShell";
+import MarketStats from "@/components/MarketStats";
+import ZoneCard from "@/components/ZoneCard";
+import { MOCK_ZONES } from "@/lib/mockZones";
+
+export default function ZonesPage() {
+  const avgSurge = MOCK_ZONES[0]?.surgeMultiplier ?? 1.8;
+  const activeJobs = MOCK_ZONES[0]?.activeJobs ?? 422;
+
+  return (
+    <AppShell>
+      <AppHeader title="Top Earning Zones" />
+      <main className="px-container-padding pb-24 pt-6 lg:px-8 lg:pb-8 lg:pt-8">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 lg:mb-10">
+            <p className="mb-1 font-label-caps text-label-caps text-on-surface-variant">
+              CURRENT RANKING
+            </p>
+            <h2 className="font-headline-md text-headline-md leading-tight text-primary lg:text-[32px] lg:leading-tight">
+              Top Earning Zones
+            </h2>
+            <div className="mt-4 flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-secondary-container animate-pulse" />
+              <span className="font-status-sm text-status-sm text-on-surface">
+                Live Market Update
+              </span>
+            </div>
+          </div>
+
+          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+            <div className="flex flex-col gap-stack-gap lg:col-span-2 xl:grid xl:grid-cols-2 xl:gap-4">
+              {MOCK_ZONES.map((zone) => (
+                <ZoneCard key={zone.name} zone={zone} />
+              ))}
+            </div>
+
+            <aside className="mt-8 border-t border-outline-variant pt-8 lg:col-span-1 lg:mt-0 lg:border-t-0 lg:pt-0">
+              <div className="lg:sticky lg:top-24">
+                <p className="mb-4 font-label-caps text-label-caps text-on-surface-variant">
+                  MARKET OVERVIEW
+                </p>
+                <MarketStats activeJobs={activeJobs} avgSurge={avgSurge} />
+
+                <div className="mt-4 hidden rounded-lg border border-outline-variant bg-surface-container-low p-5 lg:block">
+                  <p className="mb-2 font-label-caps text-label-caps text-on-surface-variant">
+                    TIP
+                  </p>
+                  <p className="font-body-md text-sm leading-relaxed text-on-surface-variant">
+                    Zones ranked by earning potential based on current demand,
+                    surge pricing, and driver supply in your area.
+                  </p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </AppShell>
+  );
+}
