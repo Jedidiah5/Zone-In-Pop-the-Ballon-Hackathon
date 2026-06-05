@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/navigation";
 import MaterialIcon from "./MaterialIcon";
+import ZoneInLogo from "./ZoneInLogo";
 
 export default function SidebarNav() {
   const pathname = usePathname();
@@ -12,13 +12,7 @@ export default function SidebarNav() {
   return (
     <aside className="fixed left-0 top-0 z-50 hidden h-screen w-64 flex-col border-r border-outline-variant bg-surface lg:flex">
       <div className="flex h-16 items-center gap-2 border-b border-outline-variant px-6">
-        <Image
-          alt="ZoneIn Logo"
-          className="h-8 w-auto"
-          height={32}
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFTU27D_0ATOR8k9uvupj68WS9azGx-LH6pGZlsBbCFncTIeJOSHO7jVCWva8sXD8yle2NUJUkUAmcZeQCImidsuauyhIGCzOD7VlINF3pWM2SDLCtLCGn4jwih7Ml3uEYZM5zNkVkCtKPWDOVQqnmznyJXS1Y0hPhbZtpaI_cycJeanxqIZe9FYgjfH7GACwpcIwpy4QOYc2QchUXOLS2V0TJLr2oGdFIgxMsOPBa9UpdAwDUiJ8GVNDgKURSf0arcijoOuoMdTk"
-          width={32}
-        />
+        <ZoneInLogo className="h-8 w-8 rounded-full" size={32} />
         <span className="font-headline-md-mobile text-headline-md-mobile font-bold tracking-tighter text-primary">
           ZoneIn
         </span>

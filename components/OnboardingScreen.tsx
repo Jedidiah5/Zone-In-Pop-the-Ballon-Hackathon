@@ -6,6 +6,7 @@ import type { Platform } from "@/types";
 import AppHeader from "./AppHeader";
 import MaterialIcon from "./MaterialIcon";
 import PlatformSelector from "./PlatformSelector";
+import ZoneInLogo from "./ZoneInLogo";
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function OnboardingScreen() {
 
         <div className="relative flex flex-1 flex-col justify-center p-12 xl:p-16">
           <div className="mb-6 flex items-center gap-3">
+            <ZoneInLogo className="h-10 w-10 rounded-full" size={40} />
             <span className="font-label-caps text-label-caps uppercase tracking-widest text-on-primary/60">
               ZoneIn
             </span>
