@@ -9,10 +9,13 @@ import {
   cacheSearchLocally,
   isOnboardingCompleted,
   loadFullName,
+  loadLastPlatform,
   loadLocation,
   loadShiftPreference,
   loadVehicleType,
   saveDriverExtras,
+  saveDriverId,
+  saveLastPlatform,
   saveLocation,
 } from "@/lib/storage";
 import type { OnboardingData, Zone } from "@/types";
@@ -22,6 +25,7 @@ type ZonesApiResponse = {
   source?: "gemini" | "mock";
   reason?: string;
   error?: string;
+  driverId?: string;
 };
 
 type ProfileApiResponse = {
@@ -46,7 +50,7 @@ export default function OnboardingPage() {
         if (profile) {
           setInitialData({
             fullName: profile.full_name ?? loadFullName(),
-            platform: profile.platform,
+            platform: profile.platform ?? loadLastPlatform(),
             location: profile.home_area ?? loadLocation(),
             vehicleType: profile.vehicle_type ?? loadVehicleType(),
             shiftPreference:
@@ -61,6 +65,7 @@ export default function OnboardingPage() {
       } catch {
         setInitialData({
           fullName: loadFullName(),
+          platform: loadLastPlatform(),
           location: loadLocation(),
           vehicleType: loadVehicleType(),
           shiftPreference: loadShiftPreference(),
@@ -160,6 +165,8 @@ export default function OnboardingPage() {
         sourceReason: reason,
       });
 
+      saveDriverId(data.platform, data.location);
+      saveLastPlatform(data.platform);
       saveDriverExtras({ onboardingCompleted: true });
 
       await fetch("/api/profile", {

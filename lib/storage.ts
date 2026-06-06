@@ -1,9 +1,12 @@
+import { deriveDriverId } from "@/lib/driverId";
 import { MOCK_ZONES } from "@/lib/mockZones";
 import type { Platform, ShiftPreference, VehicleType, Zone } from "@/types";
 
 const KEYS = {
   results: "zonein_results",
   platform: "zonein_platform",
+  lastPlatform: "zonein_last_platform",
+  driverId: "zonein_driver_id",
   location: "zonein_location",
   source: "zonein_source",
   sourceReason: "zonein_source_reason",
@@ -116,6 +119,35 @@ export function loadPlatform(): Platform | null {
 
   const stored = localStorage.getItem(KEYS.platform) as Platform | null;
   return stored ?? null;
+}
+
+export function loadLastPlatform(): Platform | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const stored = localStorage.getItem(KEYS.lastPlatform) as Platform | null;
+  return stored ?? loadPlatform();
+}
+
+export function saveLastPlatform(platform: Platform) {
+  localStorage.setItem(KEYS.lastPlatform, platform);
+}
+
+export function saveDriverId(platform: string, location: string) {
+  localStorage.setItem(KEYS.driverId, deriveDriverId(platform, location));
+}
+
+export function loadDriverId(): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return localStorage.getItem(KEYS.driverId);
+}
+
+export function isReturningDriver(): boolean {
+  return Boolean(loadDriverId());
 }
 
 export function loadLocation(): string {

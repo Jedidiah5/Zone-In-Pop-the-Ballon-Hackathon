@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { deriveDriverId } from "@/lib/driverId";
 import { getZoneRecommendations } from "@/lib/gemini";
 import { MOCK_ZONES } from "@/lib/mockZones";
+import { recallDriverHistory, rememberDriverSession } from "@/lib/mubit";
 import { createClient } from "@/lib/supabase/server";
 import type { Platform, Zone } from "@/types";
 
@@ -18,9 +20,14 @@ function shouldUseMockFallback(message: string): boolean {
   );
 }
 
-function mockResponse(reason: string) {
+function mockResponse(reason: string, driverId: string) {
   console.warn(`[ZoneIn API] Using mock data — ${reason}`);
-  return NextResponse.json({ zones: MOCK_ZONES, source: "mock", reason });
+  return NextResponse.json({
+    zones: MOCK_ZONES,
+    source: "mock",
+    reason,
+    driverId,
+  });
 }
 
 function getErrorStatus(message: string): number {
@@ -75,6 +82,16 @@ async function saveSearchToDatabase({
     .eq("id", userId);
 }
 
+async function fetchZonesWithMemory(platform: string, location: string) {
+  const driverId = deriveDriverId(platform, location);
+  const memory = await recallDriverHistory(driverId);
+  const zones = await getZoneRecommendations(platform, location, memory);
+
+  await rememberDriverSession(driverId, platform, location, zones);
+
+  return { zones, driverId, memory };
+}
+
 export async function POST(request: NextRequest) {
   const supabase = createClient();
   const {
@@ -102,9 +119,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const driverId = deriveDriverId(platform, location);
+
   try {
-    const zones = await getZoneRecommendations(platform, location);
-    console.log("[ZoneIn API] Gemini success —", zones.length, "zones");
+    const { zones, memory } = await fetchZonesWithMemory(platform, location);
+    console.log("[ZoneIn API] Gemini success —", zones.length, "zones", {
+      driverId,
+      hasMemory: Boolean(memory),
+    });
 
     await saveSearchToDatabase({
       userId: user.id,
@@ -114,7 +136,7 @@ export async function POST(request: NextRequest) {
       source: "gemini",
     });
 
-    return NextResponse.json({ zones, source: "gemini" });
+    return NextResponse.json({ zones, source: "gemini", driverId });
   } catch (error) {
     const message =
       error instanceof Error
@@ -125,6 +147,7 @@ export async function POST(request: NextRequest) {
 
     if (shouldUseMockFallback(message)) {
       try {
+        await rememberDriverSession(driverId, platform, location, MOCK_ZONES);
         await saveSearchToDatabase({
           userId: user.id,
           platform,
@@ -137,7 +160,7 @@ export async function POST(request: NextRequest) {
         // Non-blocking if persistence fails during mock fallback.
       }
 
-      return mockResponse(message);
+      return mockResponse(message, driverId);
     }
 
     return NextResponse.json(
@@ -169,12 +192,14 @@ export async function GET(request: NextRequest) {
 
   console.log("[ZoneIn API] GET /api/zones", { platform, location });
 
+  const driverId = deriveDriverId(platform, location);
+
   try {
-    const zones = await getZoneRecommendations(
-      platform as Platform,
-      location
-    );
-    console.log("[ZoneIn API] Gemini success —", zones.length, "zones");
+    const { zones, memory } = await fetchZonesWithMemory(platform, location);
+    console.log("[ZoneIn API] Gemini success —", zones.length, "zones", {
+      driverId,
+      hasMemory: Boolean(memory),
+    });
 
     await saveSearchToDatabase({
       userId: user.id,
@@ -184,7 +209,7 @@ export async function GET(request: NextRequest) {
       source: "gemini",
     });
 
-    return NextResponse.json({ zones, source: "gemini" });
+    return NextResponse.json({ zones, source: "gemini", driverId });
   } catch (error) {
     const message =
       error instanceof Error
@@ -194,7 +219,13 @@ export async function GET(request: NextRequest) {
     console.error("[ZoneIn API] Gemini error:", message);
 
     if (shouldUseMockFallback(message)) {
-      return mockResponse(message);
+      try {
+        await rememberDriverSession(driverId, platform, location, MOCK_ZONES);
+      } catch {
+        // Non-blocking.
+      }
+
+      return mockResponse(message, driverId);
     }
 
     return NextResponse.json(

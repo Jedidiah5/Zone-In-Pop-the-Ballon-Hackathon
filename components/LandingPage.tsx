@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin, TrendingUp, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
 import { APP_IMAGES } from "@/lib/images";
+import { isReturningDriver } from "@/lib/storage";
 
 const FEATURES = [
   {
@@ -30,6 +32,12 @@ const FEATURES = [
 ];
 
 export default function LandingPage() {
+  const [showReturningBanner, setShowReturningBanner] = useState(false);
+
+  useEffect(() => {
+    setShowReturningBanner(isReturningDriver());
+  }, []);
+
   return (
     <main className="bg-[#0A0A0A] text-white">
       {/* Mobile: Bolt-style split hero */}
@@ -57,6 +65,11 @@ export default function LandingPage() {
           <h1 className="text-2xl font-bold tracking-[-0.05em]">
             Built for London gig drivers
           </h1>
+          {showReturningBanner && (
+            <p className="mt-2 text-sm font-bold text-[#F5A623]">
+              Welcome back. We remember your last shift.
+            </p>
+          )}
           <p className="mt-2 text-sm leading-6 text-[#888888]">
             Real-time zone intelligence for Uber, Bolt, Deliveroo and Stuart.
           </p>
@@ -128,6 +141,11 @@ export default function LandingPage() {
               <br />
               Before you go.
             </h1>
+            {showReturningBanner && (
+              <p className="mt-4 text-sm font-bold text-[#F5A623]">
+                Welcome back. We remember your last shift.
+              </p>
+            )}
             <p className="mt-5 max-w-lg text-lg leading-8 text-[#888888]">
               Real-time zone intelligence for Uber, Bolt, Deliveroo and Stuart
               drivers across London.

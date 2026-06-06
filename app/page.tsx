@@ -38,5 +38,6 @@ export default async function HomePage() {
     redirect("/zones");
   }
 
+  // LandingPage handles returning-driver localStorage (zonein_driver_id, zonein_last_platform).
   return <LandingPage />;
 }

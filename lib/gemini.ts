@@ -100,7 +100,8 @@ function parseZonesResponse(text: string): Zone[] {
 
 export async function getZoneRecommendations(
   platform: string,
-  location: string
+  location: string,
+  memoryContext?: string | null
 ): Promise<Zone[]> {
   if (!isPlatform(platform)) {
     throw new Error(
@@ -124,9 +125,13 @@ export async function getZoneRecommendations(
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
+    const systemInstruction = memoryContext?.trim()
+      ? `${SYSTEM_PROMPT} Previous session memory for this driver: ${memoryContext.trim()}. Use this to personalise your recommendations.`
+      : SYSTEM_PROMPT;
+
     const model = genAI.getGenerativeModel({
       model: GEMINI_MODEL,
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction,
     });
 
     const result = await model.generateContent(
