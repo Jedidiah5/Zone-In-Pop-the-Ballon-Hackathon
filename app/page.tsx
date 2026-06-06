@@ -20,8 +20,16 @@ export default function OnboardingPage() {
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    if (!selectedPlatform || !location.trim()) {
-      setError("Please select a platform and enter your location");
+    if (!selectedPlatform && !location.trim()) {
+      setError("Select your platform and enter your area");
+      return;
+    }
+    if (!selectedPlatform) {
+      setError("Tap your platform — Uber, Bolt, Deliveroo or Stuart");
+      return;
+    }
+    if (!location.trim()) {
+      setError("Enter your current area, e.g. Shoreditch");
       return;
     }
 
