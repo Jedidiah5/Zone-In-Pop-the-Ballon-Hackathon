@@ -2,33 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-.material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
+html {
+  background: #0a0a0a;
+  color-scheme: dark;
 }
 
 body {
   -webkit-tap-highlight-color: transparent;
-  background-color: #fafafa;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-space-grotesk), Space Grotesk, sans-serif;
 }
 
-.active-pill {
-  background-color: #000000;
-  color: #ffffff;
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: #f5a623;
+  color: #0a0a0a;
 }
 
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@media (min-width: 1024px) {
-  body {
-    background-color: #f9f9ff;
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.3);
   }
 }

@@ -2,11 +2,11 @@
 
 import type { Platform } from "@/types";
 
-const PLATFORMS: { id: Platform; label: string }[] = [
-  { id: "uber", label: "Uber" },
-  { id: "bolt", label: "Bolt" },
-  { id: "deliveroo", label: "Deliveroo" },
-  { id: "stuart", label: "Stuart" },
+const PLATFORMS: { id: Platform; label: string; dotClass: string }[] = [
+  { id: "uber", label: "Uber", dotClass: "bg-black border border-[#333333]" },
+  { id: "bolt", label: "Bolt", dotClass: "bg-[#00FF94]" },
+  { id: "deliveroo", label: "Deliveroo", dotClass: "bg-[#00C2B8]" },
+  { id: "stuart", label: "Stuart", dotClass: "bg-[#7B61FF]" },
 ];
 
 type PlatformSelectorProps = {
@@ -19,30 +19,26 @@ export default function PlatformSelector({
   onSelect,
 }: PlatformSelectorProps) {
   return (
-    <div className="space-y-stack-gap">
-      <label className="font-label-caps text-label-caps uppercase text-on-surface-variant">
-        Select Platform
-      </label>
-      <div className="flex flex-wrap gap-2 lg:gap-3">
+    <div className="grid grid-cols-2 gap-3">
         {PLATFORMS.map((platform) => {
           const isSelected = selected === platform.id;
 
           return (
             <button
               key={platform.id}
-              className={`border px-4 py-2 font-label-caps text-label-caps transition-colors hover:bg-surface-container-low lg:px-5 lg:py-2.5 ${
+              className={`flex h-24 flex-col justify-between rounded-xl border p-4 text-left transition-all active:scale-[0.98] ${
                 isSelected
-                  ? "border-2 border-primary font-bold text-primary"
-                  : "border border-outline-variant text-on-surface-variant"
+                  ? "border-[#F5A623] bg-[#F5A623]/10"
+                  : "border-[#222222] bg-[#141414] hover:border-[#333333]"
               }`}
               onClick={() => onSelect(platform.id)}
               type="button"
             >
-              {platform.label}
+              <span className={`h-3 w-3 rounded-full ${platform.dotClass}`} />
+              <span className="text-lg font-bold text-white">{platform.label}</span>
             </button>
           );
         })}
-      </div>
     </div>
   );
 }
