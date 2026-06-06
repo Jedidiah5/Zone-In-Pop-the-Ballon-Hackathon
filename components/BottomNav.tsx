@@ -9,7 +9,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-outline-variant bg-surface px-container-padding pb-safe lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-primary-container bg-primary px-container-padding pb-safe lg:hidden">
       {NAV_ITEMS.map((item) => {
         const isActive = pathname === item.href;
 
@@ -18,8 +18,8 @@ export default function BottomNav() {
             key={item.href}
             className={`flex w-1/3 flex-col items-center justify-center pt-1 transition-all active:scale-95 ${
               isActive
-                ? "border-t-2 border-primary text-primary"
-                : "text-on-surface-variant hover:opacity-80"
+                ? "border-t-2 border-secondary-container text-on-primary"
+                : "text-on-primary/60 hover:text-on-primary"
             }`}
             href={item.href}
           >

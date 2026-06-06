@@ -9,7 +9,7 @@ export default function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen">
       <SidebarNav />
-      <div className="flex min-h-screen flex-col lg:ml-64">
+      <div className="flex min-h-screen flex-col bg-primary-container lg:ml-64">
         {children}
         <BottomNav />
       </div>
