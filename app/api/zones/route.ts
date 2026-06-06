@@ -10,7 +10,10 @@ function shouldUseMockFallback(message: string): boolean {
     message.includes("Too Many Requests") ||
     message.includes("expired") ||
     message.includes("invalid") ||
-    message.includes("not configured")
+    message.includes("not configured") ||
+    message.includes("valid zone objects") ||
+    message.includes("parse Gemini response") ||
+    message.includes("JSON array")
   );
 }
 

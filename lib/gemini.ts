@@ -26,7 +26,7 @@ function buildUserPrompt(platform: Platform, location: string): string {
     minute: "2-digit",
   });
 
-  return `A ${platform} driver is currently near ${location} in London. The current time is ${currentTime}. Recommend the top 3 zones they should drive to right now to maximise earnings. For each zone return: name, distance (e.g. 1.2 miles away), potential (high/medium/low), reasoning (one sentence max), surgeMultiplier (e.g. 1.8), activeJobs (estimated number). Return as a JSON array of 3 zone objects.`;
+  return `A ${platform} driver is currently near ${location} in London. The current time is ${currentTime}. Recommend at least 5 London borough zones they should drive to right now to maximise earnings. Use exact London borough names for the "name" field where possible so results can be matched to a borough map (for example Westminster, Hackney, Islington, Camden, Southwark, Tower Hamlets). For each zone return: name, distance (e.g. 1.2 MILES AWAY), potential (high/medium/low), reasoning (one sentence max), detailedReasoning (3-4 sentences explaining time, day, local events or patterns), surgeMultiplier (number e.g. 1.8), activeJobs (estimated number), demandWindowMinutes (number), congestionWarning (boolean), peakEndTime (e.g. "11:30pm"). Return as a JSON array of at least 5 zone objects.`;
 }
 
 function extractJson(text: string): string {
@@ -54,8 +54,12 @@ function parseZone(value: unknown): Zone | null {
     typeof zone.distance !== "string" ||
     !isPotential(zone.potential) ||
     typeof zone.reasoning !== "string" ||
+    typeof zone.detailedReasoning !== "string" ||
     typeof zone.surgeMultiplier !== "number" ||
-    typeof zone.activeJobs !== "number"
+    typeof zone.activeJobs !== "number" ||
+    typeof zone.demandWindowMinutes !== "number" ||
+    typeof zone.congestionWarning !== "boolean" ||
+    typeof zone.peakEndTime !== "string"
   ) {
     return null;
   }
@@ -65,8 +69,12 @@ function parseZone(value: unknown): Zone | null {
     distance: zone.distance,
     potential: zone.potential,
     reasoning: zone.reasoning,
+    detailedReasoning: zone.detailedReasoning,
     surgeMultiplier: zone.surgeMultiplier,
     activeJobs: zone.activeJobs,
+    demandWindowMinutes: zone.demandWindowMinutes,
+    congestionWarning: zone.congestionWarning,
+    peakEndTime: zone.peakEndTime,
   };
 }
 
@@ -83,7 +91,7 @@ function parseZonesResponse(text: string): Zone[] {
     .map(parseZone)
     .filter((zone): zone is Zone => zone !== null);
 
-  if (zones.length === 0) {
+  if (zones.length < 5) {
     throw new Error("Gemini response did not contain valid zone objects");
   }
 

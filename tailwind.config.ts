@@ -9,6 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        zoneblack: "#0A0A0A",
+        zoneamber: "#F5A623",
+        zonegreen: "#00FF94",
+        zonered: "#FF3B30",
+        zonecard: "#141414",
+        zoneborder: "#222222",
+        zonemuted: "#888888",
         "tertiary-container": "#1b1b1b",
         "surface-container-low": "#f0f3ff",
         "surface-container-highest": "#dce2f3",
@@ -71,6 +78,7 @@ const config: Config = {
         gutter: "16px",
       },
       fontFamily: {
+        sans: ["var(--font-space-grotesk)", "Space Grotesk", "sans-serif"],
         "body-lg": ["var(--font-inter)", "Inter", "sans-serif"],
         "headline-md-mobile": ["Geist", "sans-serif"],
         "status-sm": ["var(--font-inter)", "Inter", "sans-serif"],
