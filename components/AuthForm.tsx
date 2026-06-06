@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
@@ -171,17 +173,32 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 >
                   Password
                 </label>
-                <input
-                  autoComplete={isSignup ? "new-password" : "current-password"}
-                  className="bolt-input"
-                  id="password"
-                  minLength={6}
-                  onChange={(event) => setPassword(event.target.value)}
-                  placeholder="Min. 6 characters"
-                  required
-                  type="password"
-                  value={password}
-                />
+                <div className="relative">
+                  <input
+                    autoComplete={isSignup ? "new-password" : "current-password"}
+                    className="bolt-input pr-12"
+                    id="password"
+                    minLength={6}
+                    onChange={(event) => setPassword(event.target.value)}
+                    placeholder="Min. 6 characters"
+                    required
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                  />
+                  <button
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showPassword}
+                    className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 touch-manipulation items-center justify-center rounded-md text-[#666666] active:opacity-70"
+                    onClick={() => setShowPassword((value) => !value)}
+                    type="button"
+                  >
+                    {showPassword ? (
+                      <EyeOff aria-hidden="true" size={20} strokeWidth={2.5} />
+                    ) : (
+                      <Eye aria-hidden="true" size={20} strokeWidth={2.5} />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {error && (
