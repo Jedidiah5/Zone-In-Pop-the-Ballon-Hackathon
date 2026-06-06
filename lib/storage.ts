@@ -17,7 +17,23 @@ const KEYS = {
   onboardingCompleted: "zonein_onboarding_completed",
   paid: "zonein_paid",
   guest: "zonein_guest",
+  shiftEarnings: "zonein_shift_earnings",
+  shiftSession: "zonein_shift_session",
 } as const;
+
+export type ShiftEarningsState = {
+  minutesOnline: number;
+  totalEarnings: number;
+  bestZone: string | null;
+  byZone: { zone: string; earnings: number }[];
+};
+
+const EMPTY_SHIFT_EARNINGS: ShiftEarningsState = {
+  minutesOnline: 0,
+  totalEarnings: 0,
+  bestZone: null,
+  byZone: [],
+};
 
 type SearchCache = {
   zones: Zone[];
@@ -220,4 +236,32 @@ export function isGuestUser(): boolean {
 
 export function setGuestAccess() {
   localStorage.setItem(KEYS.guest, "true");
+  localStorage.removeItem(KEYS.paid);
+}
+
+export function loadShiftEarnings(): ShiftEarningsState {
+  if (typeof window === "undefined") {
+    return EMPTY_SHIFT_EARNINGS;
+  }
+
+  const stored = localStorage.getItem(KEYS.shiftEarnings);
+  if (!stored) {
+    return EMPTY_SHIFT_EARNINGS;
+  }
+
+  try {
+    const parsed = JSON.parse(stored) as ShiftEarningsState;
+    return {
+      minutesOnline: parsed.minutesOnline ?? 0,
+      totalEarnings: parsed.totalEarnings ?? 0,
+      bestZone: parsed.bestZone ?? null,
+      byZone: Array.isArray(parsed.byZone) ? parsed.byZone : [],
+    };
+  } catch {
+    return EMPTY_SHIFT_EARNINGS;
+  }
+}
+
+export function saveShiftEarnings(state: ShiftEarningsState) {
+  localStorage.setItem(KEYS.shiftEarnings, JSON.stringify(state));
 }

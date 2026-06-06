@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import { useStoredZones } from "@/hooks/useStoredZones";
 import { updateProfile } from "@/lib/database";
+import { logShiftZoneChange } from "@/lib/shift";
 import { saveActiveZone } from "@/lib/storage";
 import { getMapsDirectionsUrl, getZoneSlug } from "@/lib/zoneCoordinates";
 import type { Zone } from "@/types";
@@ -57,6 +58,7 @@ export default function ZoneDetailPage() {
     }
 
     saveActiveZone(zone.name);
+    logShiftZoneChange(zone.name);
 
     try {
       await updateProfile({ active_zone: zone.name });

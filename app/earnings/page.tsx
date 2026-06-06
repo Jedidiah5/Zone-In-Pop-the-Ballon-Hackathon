@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -12,37 +12,47 @@ import {
   YAxis,
 } from "recharts";
 import AppLayout from "@/components/AppLayout";
-import { useStoredZones } from "@/hooks/useStoredZones";
+import { useShiftTimer } from "@/hooks/useShiftTimer";
+import {
+  formatShiftMinutes,
+  isShiftActive,
+  startShift,
+} from "@/lib/shift";
+import {
+  loadActiveZone,
+  loadLocation,
+  loadShiftEarnings,
+} from "@/lib/storage";
 
 export default function EarningsPage() {
   const router = useRouter();
-  const { zones, isReady } = useStoredZones();
   const [isMounted, setIsMounted] = useState(false);
+  const [shiftEarnings, setShiftEarnings] = useState(() => loadShiftEarnings());
+  const { totalMinutes, session } = useShiftTimer();
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    setShiftEarnings(loadShiftEarnings());
+  }, [totalMinutes, session.active]);
 
-  const earningsData = useMemo(() => {
-    return zones.slice(0, 5).map((zone) => ({
-      zone: zone.name.split(" ")[0],
-      earnings: Number((zone.surgeMultiplier * zone.activeJobs * 0.02).toFixed(1)),
-    }));
-  }, [zones]);
+  const { totalEarnings, bestZone, byZone } = shiftEarnings;
+  const earningsData = byZone;
+  const hasEarnings = totalEarnings > 0 || byZone.length > 0;
+  const shiftIsActive = session.active;
+  const timeOnlineLabel = formatShiftMinutes(totalMinutes);
 
-  const totalEarnings = useMemo(() => {
-    return earningsData.reduce((sum, item) => sum + item.earnings, 0);
-  }, [earningsData]);
+  const handleShiftAction = () => {
+    if (shiftIsActive) {
+      router.push("/shift");
+      return;
+    }
 
-  const bestZone = zones[0]?.name ?? "—";
-
-  if (!isReady) {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
-        Loading earnings...
-      </main>
-    );
-  }
+    startShift({
+      homeArea: loadLocation(),
+      activeZone: loadActiveZone(),
+    });
+    router.push("/shift");
+  };
 
   return (
     <AppLayout>
@@ -56,7 +66,9 @@ export default function EarningsPage() {
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
               Time online
             </p>
-            <p className="text-3xl font-bold tracking-[-0.06em]">2h 34m</p>
+            <p className="text-3xl font-bold tracking-[-0.06em]">
+              {totalMinutes === 0 ? "0m" : timeOnlineLabel}
+            </p>
           </div>
           <div className="bolt-card p-5">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
@@ -71,7 +83,7 @@ export default function EarningsPage() {
               Best zone
             </p>
             <p className="text-3xl font-bold tracking-[-0.06em] text-black">
-              {bestZone}
+              {bestZone ?? "—"}
             </p>
           </div>
         </section>
@@ -81,7 +93,7 @@ export default function EarningsPage() {
             Earnings by zone
           </h2>
           <div className="h-52 min-h-52 lg:h-64">
-            {isMounted ? (
+            {isMounted && hasEarnings ? (
               <ResponsiveContainer height="100%" width="100%">
                 <BarChart data={earningsData}>
                   <CartesianGrid stroke="#E5E5E5" vertical={false} />
@@ -116,17 +128,24 @@ export default function EarningsPage() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full rounded-md border border-[#E5E5E5] bg-white" />
+              <div className="flex h-full flex-col items-center justify-center rounded-md border border-[#E5E5E5] bg-[#F7F7F7] px-6 text-center">
+                <p className="text-sm font-bold text-black">No earnings yet</p>
+                <p className="mt-1 text-xs text-[#666666]">
+                  {shiftIsActive || isShiftActive()
+                    ? "Finish your shift to see estimated earnings here."
+                    : "Start a shift to track your time and earnings here."}
+                </p>
+              </div>
             )}
           </div>
         </section>
 
         <button
           className="bolt-btn-primary max-w-md"
-          onClick={() => router.push("/shift")}
+          onClick={handleShiftAction}
           type="button"
         >
-          Start new shift
+          {shiftIsActive ? "View live shift →" : "Start new shift"}
         </button>
       </div>
     </AppLayout>

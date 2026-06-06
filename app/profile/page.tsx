@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import PlatformIcon from "@/components/PlatformIcon";
 import { getProfile, signOut, updateProfile } from "@/lib/database";
-import { loadPreferredZones, saveLocation } from "@/lib/storage";
+import {
+  isGuestUser,
+  isPaidSubscriber,
+  loadPreferredZones,
+  saveLocation,
+} from "@/lib/storage";
 import type { Platform, ShiftPreference, VehicleType } from "@/types";
 
 const PLATFORM_LABELS: Record<Platform, string> = {
@@ -42,6 +47,9 @@ export default function ProfilePage() {
   const [email, setEmail] = useState("");
   const [preferredZones, setPreferredZones] = useState<string[]>([]);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [hasPro, setHasPro] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -61,10 +69,30 @@ export default function ProfilePage() {
       }
 
       setPreferredZones(loadPreferredZones());
+      const guest = isGuestUser();
+      setIsGuest(guest);
+      setHasPro(isPaidSubscriber() && !guest);
     }
 
     loadProfile();
   }, []);
+
+  const handleSubscribe = async () => {
+    setIsCheckoutLoading(true);
+
+    try {
+      const response = await fetch("/api/checkout", { method: "POST" });
+      const data = (await response.json()) as { url?: string; error?: string };
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error ?? "Could not start checkout");
+      }
+
+      window.location.href = data.url;
+    } catch {
+      setIsCheckoutLoading(false);
+    }
+  };
 
   const handleHomeAreaBlur = async () => {
     if (!homeArea.trim()) {
@@ -190,18 +218,52 @@ export default function ProfilePage() {
             </div>
           </section>
 
-          <section className="bolt-card border-black/30 p-5 lg:col-span-2">
+          <section
+            className={`bolt-card p-5 lg:col-span-2 ${
+              hasPro ? "border-black/30" : "border-[#E5E5E5]"
+            }`}
+          >
             <div className="mb-3 flex items-center justify-between gap-4">
               <h2 className="text-xl font-bold tracking-[-0.05em] text-black">
                 ZoneIn Pro
               </h2>
-              <span className="rounded-full border border-black bg-black px-3 py-1 text-xs font-bold text-white">
-                Active
-              </span>
+              {hasPro ? (
+                <span className="rounded-full border border-black bg-black px-3 py-1 text-xs font-bold text-white">
+                  Active
+                </span>
+              ) : isGuest ? (
+                <span className="rounded-full border border-[#E5E5E5] bg-[#F7F7F7] px-3 py-1 text-xs font-bold text-[#666666]">
+                  Guest
+                </span>
+              ) : (
+                <span className="rounded-full border border-[#E5E5E5] bg-[#F7F7F7] px-3 py-1 text-xs font-bold text-[#666666]">
+                  Not subscribed
+                </span>
+              )}
             </div>
-            <p className="text-sm font-bold text-[#666666]">
-              £2/month · cancel anytime
-            </p>
+            {hasPro ? (
+              <p className="text-sm font-bold text-[#666666]">
+                £2/month · cancel anytime
+              </p>
+            ) : isGuest ? (
+              <p className="text-sm font-bold text-[#666666]">
+                Demo access only · upgrade for full shift intelligence
+              </p>
+            ) : (
+              <p className="text-sm font-bold text-[#666666]">
+                £2/month · unlock live zones and surge alerts
+              </p>
+            )}
+            {!hasPro && (
+              <button
+                className="bolt-btn-primary mt-4 max-w-xs disabled:opacity-70"
+                disabled={isCheckoutLoading}
+                onClick={handleSubscribe}
+                type="button"
+              >
+                {isCheckoutLoading ? "Redirecting..." : "Subscribe for £2/month →"}
+              </button>
+            )}
           </section>
         </div>
 
