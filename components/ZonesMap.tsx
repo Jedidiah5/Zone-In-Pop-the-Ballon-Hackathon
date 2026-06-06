@@ -33,7 +33,7 @@ export default function ZonesMap({
         initialViewState={{
           latitude: 51.5074,
           longitude: -0.1276,
-          zoom: 10.5,
+          zoom: 11.5,
         }}
         keyboard={false}
         mapStyle={LIGHT_MAP_STYLE}
