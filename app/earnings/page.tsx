@@ -45,44 +45,44 @@ export default function EarningsPage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="mb-6 text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
+    <main className="bg-[#0A0A0A] pb-28 pt-safe text-white">
+      <div className="page-shell-wide">
+        <h1 className="mb-4 text-2xl font-bold leading-tight tracking-[-0.05em] text-white">
           Today&apos;s Shift
         </h1>
 
-        <section className="mb-8 space-y-4">
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="mb-5 grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Time Online
             </p>
-            <p className="text-4xl font-bold tracking-[-0.06em] text-white sm:text-5xl">
+            <p className="text-3xl font-bold tracking-[-0.06em] text-white">
               2h 34m
             </p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-5">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Est. Earnings
             </p>
-            <p className="text-4xl font-bold tracking-[-0.06em] text-[#F5A623] sm:text-5xl">
+            <p className="text-3xl font-bold tracking-[-0.06em] text-[#F5A623]">
               £{totalEarnings.toFixed(2)}
             </p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-5">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Best Zone
             </p>
-            <p className="text-4xl font-bold tracking-[-0.06em] text-[#00FF94] sm:text-5xl">
+            <p className="text-3xl font-bold tracking-[-0.06em] text-[#00FF94]">
               {bestZone}
             </p>
           </div>
         </section>
 
-        <section className="mb-8 rounded-xl border border-[#222222] bg-[#141414] p-5">
-          <h2 className="mb-5 text-xl font-bold tracking-[-0.04em] text-white">
+        <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-4">
+          <h2 className="mb-4 text-lg font-bold tracking-[-0.04em] text-white">
             Earnings by Zone
           </h2>
-          <div className="h-64 min-h-64">
+          <div className="h-52 min-h-52 md:h-56">
             {isMounted ? (
               <ResponsiveContainer height="100%" width="100%">
                 <BarChart data={earningsData}>

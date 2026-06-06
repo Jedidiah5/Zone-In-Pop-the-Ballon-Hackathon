@@ -6,7 +6,7 @@ import BottomNav from "@/components/BottomNav";
 import PlatformIcon from "@/components/PlatformIcon";
 import { getProfile, signOut, updateProfile } from "@/lib/database";
 import { loadPreferredZones, saveLocation } from "@/lib/storage";
-import type { Platform } from "@/types";
+import type { Platform, ShiftPreference, VehicleType } from "@/types";
 
 const PLATFORM_LABELS: Record<Platform, string> = {
   uber: "Uber",
@@ -15,10 +15,30 @@ const PLATFORM_LABELS: Record<Platform, string> = {
   stuart: "Stuart",
 };
 
+const VEHICLE_LABELS: Record<VehicleType, string> = {
+  car: "Car",
+  bike: "Bike",
+  scooter: "Scooter",
+  van: "Van",
+};
+
+const SHIFT_LABELS: Record<ShiftPreference, string> = {
+  morning: "Morning (6am–12pm)",
+  afternoon: "Afternoon (12pm–6pm)",
+  evening: "Evening (6pm–12am)",
+  night: "Night (12am–6am)",
+  flexible: "Flexible",
+};
+
 export default function ProfilePage() {
   const router = useRouter();
+  const [fullName, setFullName] = useState("");
   const [platform, setPlatform] = useState<Platform>("bolt");
   const [homeArea, setHomeArea] = useState("");
+  const [vehicleType, setVehicleType] = useState<VehicleType | null>(null);
+  const [shiftPreference, setShiftPreference] = useState<ShiftPreference | null>(
+    null
+  );
   const [email, setEmail] = useState("");
   const [preferredZones, setPreferredZones] = useState<string[]>([]);
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -28,15 +48,14 @@ export default function ProfilePage() {
       try {
         const profile = await getProfile();
 
-        if (profile?.platform) {
-          setPlatform(profile.platform);
+        if (profile?.full_name) setFullName(profile.full_name);
+        if (profile?.platform) setPlatform(profile.platform);
+        if (profile?.home_area) setHomeArea(profile.home_area);
+        if (profile?.vehicle_type) setVehicleType(profile.vehicle_type);
+        if (profile?.shift_preference) {
+          setShiftPreference(profile.shift_preference);
         }
-        if (profile?.home_area) {
-          setHomeArea(profile.home_area);
-        }
-        if (profile?.email) {
-          setEmail(profile.email);
-        }
+        if (profile?.email) setEmail(profile.email);
       } catch {
         // Profile loads from local cache if Supabase is unavailable.
       }
@@ -74,12 +93,12 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-6 flex items-start justify-between gap-3">
+    <main className="bg-[#0A0A0A] pb-28 pt-safe text-white">
+      <div className="page-shell-wide">
+        <div className="mb-4 flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
-              My Profile
+            <h1 className="text-2xl font-bold leading-tight tracking-[-0.05em] text-white">
+              {fullName ? `Hey, ${fullName}` : "My Profile"}
             </h1>
             {email && (
               <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[#555555]">
@@ -89,14 +108,39 @@ export default function ProfilePage() {
           </div>
           <button
             className="touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[#F5A623] active:opacity-80"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/onboarding")}
             type="button"
           >
             New search
           </button>
         </div>
 
-        <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-5">
+        {(vehicleType || shiftPreference) && (
+          <section className="mb-5 grid grid-cols-2 gap-3">
+            {vehicleType && (
+              <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
+                  Vehicle
+                </p>
+                <p className="mt-1 text-lg font-bold text-white">
+                  {VEHICLE_LABELS[vehicleType]}
+                </p>
+              </div>
+            )}
+            {shiftPreference && (
+              <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
+                  Shift
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#F5A623]">
+                  {SHIFT_LABELS[shiftPreference]}
+                </p>
+              </div>
+            )}
+          </section>
+        )}
+
+        <section className="mb-4 rounded-xl border border-[#222222] bg-[#141414] p-4">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
             Platform
           </p>
@@ -108,7 +152,7 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="mb-4 rounded-xl border border-[#222222] bg-[#141414] p-4">
           <label
             className="mb-3 block text-xs font-bold uppercase tracking-[0.14em] text-[#888888]"
             htmlFor="home-area"
@@ -125,7 +169,7 @@ export default function ProfilePage() {
           />
         </section>
 
-        <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="mb-4 rounded-xl border border-[#222222] bg-[#141414] p-4">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
             Top zones from last search
           </p>
@@ -147,7 +191,7 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        <section className="mb-8 rounded-xl border border-[#F5A623] bg-[#141414] p-5">
+        <section className="mb-6 rounded-xl border border-[#F5A623] bg-[#141414] p-4">
           <div className="mb-3 flex items-center justify-between gap-4">
             <h2 className="text-xl font-bold tracking-[-0.05em] text-[#F5A623]">
               ZoneIn Pro

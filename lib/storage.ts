@@ -1,5 +1,5 @@
 import { MOCK_ZONES } from "@/lib/mockZones";
-import type { Platform, Zone } from "@/types";
+import type { Platform, ShiftPreference, VehicleType, Zone } from "@/types";
 
 const KEYS = {
   results: "zonein_results",
@@ -8,6 +8,10 @@ const KEYS = {
   source: "zonein_source",
   sourceReason: "zonein_source_reason",
   activeZone: "zonein_active_zone",
+  fullName: "zonein_full_name",
+  vehicleType: "zonein_vehicle_type",
+  shiftPreference: "zonein_shift_preference",
+  onboardingCompleted: "zonein_onboarding_completed",
 } as const;
 
 type SearchCache = {
@@ -52,6 +56,53 @@ export function cacheSearchLocally({
   } else {
     localStorage.removeItem(KEYS.sourceReason);
   }
+}
+
+export function saveDriverExtras(extras: {
+  fullName?: string;
+  vehicleType?: VehicleType;
+  shiftPreference?: ShiftPreference;
+  onboardingCompleted?: boolean;
+}) {
+  if (extras.fullName !== undefined) {
+    localStorage.setItem(KEYS.fullName, extras.fullName);
+  }
+  if (extras.vehicleType !== undefined) {
+    localStorage.setItem(KEYS.vehicleType, extras.vehicleType);
+  }
+  if (extras.shiftPreference !== undefined) {
+    localStorage.setItem(KEYS.shiftPreference, extras.shiftPreference);
+  }
+  if (extras.onboardingCompleted !== undefined) {
+    localStorage.setItem(
+      KEYS.onboardingCompleted,
+      extras.onboardingCompleted ? "true" : "false"
+    );
+  }
+}
+
+export function loadFullName(): string {
+  if (typeof window === "undefined") return "";
+  return localStorage.getItem(KEYS.fullName) ?? "";
+}
+
+export function loadVehicleType(): VehicleType | null {
+  if (typeof window === "undefined") return null;
+  const value = localStorage.getItem(KEYS.vehicleType) as VehicleType | null;
+  return value ?? null;
+}
+
+export function loadShiftPreference(): ShiftPreference | null {
+  if (typeof window === "undefined") return null;
+  const value = localStorage.getItem(
+    KEYS.shiftPreference
+  ) as ShiftPreference | null;
+  return value ?? null;
+}
+
+export function isOnboardingCompleted(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(KEYS.onboardingCompleted) === "true";
 }
 
 export function saveZones(zones: Zone[]) {

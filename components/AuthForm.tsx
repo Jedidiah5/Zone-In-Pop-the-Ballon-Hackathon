@@ -49,7 +49,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         }
 
         if (data.session) {
-          router.push("/");
+          router.push("/onboarding");
           router.refresh();
           return;
         }
@@ -69,7 +69,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
         throw signInError;
       }
 
-      router.push("/");
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("onboarding_completed")
+        .maybeSingle();
+
+      router.push(
+        profileData?.onboarding_completed ? "/zones" : "/onboarding"
+      );
       router.refresh();
     } catch (err) {
       setError(getAuthErrorMessage(err));
@@ -79,24 +86,24 @@ export default function AuthForm({ mode }: AuthFormProps) {
   };
 
   return (
-    <main className="min-h-dvh overflow-y-auto bg-[#0A0A0A] px-5 pb-8 pt-safe text-white">
-      <div className="mx-auto flex w-full max-w-xl flex-col py-6">
-        <div className="mb-10 text-2xl font-bold tracking-[-0.04em]">
+    <main className="overflow-y-auto bg-[#0A0A0A] px-5 pb-6 pt-safe text-white md:flex md:min-h-dvh md:items-center md:justify-center">
+      <div className="mx-auto flex w-full max-w-md flex-col py-4 md:rounded-2xl md:border md:border-[#222222] md:bg-[#111111] md:p-6">
+        <div className="mb-5 text-xl font-bold tracking-[-0.04em] md:text-2xl">
           ZoneIn<span className="text-[#F5A623]">.</span>
         </div>
 
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-white">
+        <div className="mb-5">
+          <h1 className="text-2xl font-bold leading-tight tracking-[-0.06em] text-white md:text-3xl">
             {isSignup ? "Create account" : "Welcome back"}
           </h1>
-          <p className="mt-5 text-base font-medium leading-7 text-[#888888]">
+          <p className="mt-2 text-sm font-medium leading-6 text-[#888888]">
             {isSignup
               ? "Sign up to save your zones and profile across devices."
               : "Sign in with the email and password you used to sign up."}
           </p>
         </div>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <div>
             <label
               className="mb-3 block text-xs font-bold uppercase tracking-[0.14em] text-[#555555]"
@@ -106,7 +113,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             </label>
             <input
               autoComplete="email"
-              className="h-14 w-full touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-4 text-base font-bold text-white outline-none transition-colors placeholder:text-[#555555] focus:border-[#F5A623]"
+              className="h-12 w-full touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-4 text-base font-bold text-white outline-none transition-colors placeholder:text-[#555555] focus:border-[#F5A623]"
               id="email"
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@email.com"
@@ -125,7 +132,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             </label>
             <input
               autoComplete={isSignup ? "new-password" : "current-password"}
-              className="h-14 w-full touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-4 text-base font-bold text-white outline-none transition-colors placeholder:text-[#555555] focus:border-[#F5A623]"
+              className="h-12 w-full touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-4 text-base font-bold text-white outline-none transition-colors placeholder:text-[#555555] focus:border-[#F5A623]"
               id="password"
               minLength={6}
               onChange={(event) => setPassword(event.target.value)}
@@ -155,7 +162,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           )}
 
           <button
-            className="mt-2 flex h-14 w-full touch-manipulation cursor-pointer items-center justify-center rounded-lg bg-[#F5A623] text-base font-bold uppercase tracking-[0.08em] text-[#0A0A0A] active:opacity-80 disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-1 flex h-12 w-full touch-manipulation cursor-pointer items-center justify-center rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.08em] text-[#0A0A0A] active:opacity-80 disabled:cursor-not-allowed disabled:opacity-70"
             disabled={isLoading}
             type="submit"
           >

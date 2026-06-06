@@ -28,7 +28,7 @@ export default function PlatformSelector({
           <button
             key={platform.id}
             aria-pressed={isSelected}
-            className={`relative z-10 flex min-h-[88px] touch-manipulation cursor-pointer select-none flex-col justify-between rounded-xl border p-4 text-left transition-colors active:opacity-80 ${
+            className={`relative z-10 flex min-h-[76px] touch-manipulation cursor-pointer select-none flex-col justify-between rounded-xl border p-3 text-left transition-colors active:opacity-80 md:min-h-[72px] ${
               isSelected
                 ? "border-[#F5A623] bg-[#F5A623]/10 ring-1 ring-[#F5A623]"
                 : "border-[#222222] bg-[#141414]"

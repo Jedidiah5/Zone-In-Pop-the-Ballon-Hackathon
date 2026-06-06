@@ -35,6 +35,32 @@ body {
   touch-action: manipulation;
 }
 
+.page-shell {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 42rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.page-shell-wide {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 56rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .page-shell,
+  .page-shell-wide {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }

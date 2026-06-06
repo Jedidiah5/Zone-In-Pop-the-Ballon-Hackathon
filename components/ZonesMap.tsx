@@ -11,6 +11,7 @@ type ZonesMapProps = {
 
 export default function ZonesMap({ zones }: ZonesMapProps) {
   return (
+    <div className="h-[36dvh] min-h-[220px] w-full md:h-[260px] lg:h-[280px]">
     <Map
       initialViewState={{
         latitude: 51.5074,
@@ -18,7 +19,7 @@ export default function ZonesMap({ zones }: ZonesMapProps) {
         zoom: 10.5,
       }}
       mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-      style={{ width: "100%", height: "50vh" }}
+      style={{ width: "100%", height: "100%" }}
       scrollZoom={false}
       dragPan={false}
       dragRotate={false}
@@ -86,5 +87,6 @@ export default function ZonesMap({ zones }: ZonesMapProps) {
         );
       })}
     </Map>
+    </div>
   );
 }

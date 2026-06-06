@@ -12,7 +12,7 @@ import { loadLocation } from "@/lib/storage";
 const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[50vh] items-center justify-center px-6 text-center text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
+    <div className="flex h-[220px] items-center justify-center px-6 text-center text-sm font-bold uppercase tracking-[0.14em] text-[#888888] md:h-[260px]">
       Loading London demand map
     </div>
   ),
@@ -30,7 +30,7 @@ export default function ZonesPage() {
     }
 
     if (!hasSearch) {
-      router.replace("/");
+      router.replace("/onboarding");
     }
   }, [hasSearch, isReady, router]);
 
@@ -72,8 +72,8 @@ export default function ZonesPage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] pb-24 text-white">
-      <section className="relative overflow-hidden border-b border-[#222222] bg-[#0A0A0A]">
+    <main className="bg-[#0A0A0A] pb-24 text-white">
+      <section className="relative overflow-hidden border-b border-[#222222] bg-[#0A0A0A] md:mx-auto md:max-w-6xl">
         <div className="absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-[#FF3B30]/40 bg-[#141414]/95 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#FF3B30]">
           <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#FF3B30]" />
           LIVE
@@ -85,9 +85,9 @@ export default function ZonesPage() {
         <DynamicZonesMap zones={zones} />
       </section>
 
-      <section className="px-5 pt-5">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-3 flex items-start justify-between gap-3">
+      <section className="page-shell-wide pt-4 md:pt-5">
+        <div>
+          <div className="mb-2 flex items-start justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold tracking-[-0.04em] text-white">
                 Top Zones Now
@@ -100,13 +100,13 @@ export default function ZonesPage() {
             </div>
             <Link
               className="shrink-0 touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[#F5A623] active:opacity-80"
-              href="/"
+              href="/onboarding"
             >
               New search
             </Link>
           </div>
 
-          <div className="mb-5 flex snap-x gap-3 overflow-x-auto pb-1">
+          <div className="mb-4 flex snap-x gap-2 overflow-x-auto pb-1">
             <div className="shrink-0 rounded-full border border-[#222222] bg-[#141414] px-4 py-2 text-sm font-bold text-[#F5A623]">
               Avg Surge: {avgSurge.toFixed(1)}x
             </div>

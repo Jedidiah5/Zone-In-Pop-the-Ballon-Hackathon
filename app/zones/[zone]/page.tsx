@@ -93,7 +93,7 @@ export default function ZoneDetailPage() {
           </p>
           <button
             className="mt-6 h-12 touch-manipulation rounded-lg bg-[#F5A623] px-6 text-sm font-bold uppercase tracking-[0.1em] text-[#0A0A0A] active:opacity-80"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/onboarding")}
             type="button"
           >
             New search
@@ -107,10 +107,10 @@ export default function ZoneDetailPage() {
   const potential = getPotentialConfig(zone.potential);
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-36 pt-safe text-white">
-      <div className="mx-auto max-w-4xl">
+    <main className="bg-[#0A0A0A] pb-36 pt-safe text-white">
+      <div className="page-shell-wide">
         <button
-          className="mb-6 flex touch-manipulation items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:opacity-80"
+          className="mb-4 flex touch-manipulation items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:opacity-80"
           onClick={() => router.push("/zones")}
           type="button"
         >
@@ -118,8 +118,8 @@ export default function ZoneDetailPage() {
           Back
         </button>
 
-        <header className="mb-6">
-          <h1 className="text-[28px] font-bold leading-tight tracking-[-0.05em] text-white sm:text-[32px]">
+        <header className="mb-4">
+          <h1 className="text-2xl font-bold leading-tight tracking-[-0.05em] text-white md:text-3xl">
             {zone.name}
           </h1>
           <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
@@ -132,34 +132,34 @@ export default function ZoneDetailPage() {
           </div>
         </header>
 
-        <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
+        <section className="mb-4 grid grid-cols-3 gap-2 md:gap-3">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-3 md:p-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
               Surge
             </p>
-            <p className="text-3xl font-bold tracking-[-0.05em] text-[#F5A623]">
+            <p className="text-2xl font-bold tracking-[-0.05em] text-[#F5A623]">
               {zone.surgeMultiplier}x
             </p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-3 md:p-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
               Active Jobs
             </p>
-            <p className="text-3xl font-bold tracking-[-0.05em] text-[#00FF94]">
+            <p className="text-2xl font-bold tracking-[-0.05em] text-[#00FF94]">
               {zone.activeJobs}
             </p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-3 md:p-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
               Demand Window
             </p>
-            <p className="text-3xl font-bold tracking-[-0.05em] text-white">
+            <p className="text-2xl font-bold tracking-[-0.05em] text-white">
               ~{zone.demandWindowMinutes}m
             </p>
           </div>
         </section>
 
-        <section className="mb-6 rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="mb-4 rounded-xl border border-[#222222] bg-[#141414] p-4">
           <h2 className="mb-3 text-lg font-bold tracking-[-0.04em] text-white">
             Why this zone?
           </h2>
@@ -168,7 +168,7 @@ export default function ZoneDetailPage() {
           </p>
         </section>
 
-        <section className="rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="rounded-xl border border-[#222222] bg-[#141414] p-4">
           <h2 className="mb-4 text-lg font-bold tracking-[-0.04em] text-white">
             Watch out for
           </h2>

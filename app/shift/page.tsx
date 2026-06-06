@@ -62,14 +62,14 @@ export default function ShiftPage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="mb-6 text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
+    <main className="bg-[#0A0A0A] pb-28 pt-safe text-white">
+      <div className="page-shell-wide">
+        <h1 className="mb-4 text-2xl font-bold leading-tight tracking-[-0.05em] text-white">
           Live Shift
         </h1>
 
-        <section className="mb-5 grid grid-cols-2 gap-3">
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="mb-4 grid grid-cols-2 gap-3">
+          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Online
             </p>
@@ -87,7 +87,7 @@ export default function ShiftPage() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-[#222222] bg-[#141414] p-5">
+        <section className="rounded-xl border border-[#222222] bg-[#141414] p-4">
           <div className="mb-4 flex items-center gap-3">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#00FF94]" />
             <h2 className="text-xl font-bold tracking-[-0.04em] text-white">
