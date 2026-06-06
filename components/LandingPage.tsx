@@ -32,134 +32,203 @@ const FEATURES = [
 export default function LandingPage() {
   return (
     <main className="bg-[#0A0A0A] text-white">
-      <section className="relative overflow-hidden md:mx-auto md:max-w-6xl md:px-6 md:pt-6">
-        <div className="relative min-h-[68dvh] md:min-h-0 md:h-[420px] md:overflow-hidden md:rounded-2xl">
+      {/* Mobile: Bolt-style split hero */}
+      <section className="relative min-h-dvh lg:hidden">
+        <div className="bolt-hero-curve relative h-[58dvh] overflow-hidden bg-[#1A1A1A]">
           <Image
-            alt="London driver at night with zone map"
-            className="object-cover"
+            alt="London driver at night"
+            className="object-cover opacity-70"
             fill
             priority
             src={APP_IMAGES.heroDriver}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/20 via-[#0A0A0A]/50 to-[#0A0A0A]/90 md:bg-gradient-to-r md:from-[#0A0A0A]/90 md:via-[#0A0A0A]/50 md:to-transparent" />
-
-          <div className="relative z-10 flex min-h-[68dvh] flex-col px-5 pb-6 pt-safe md:min-h-0 md:h-full md:justify-center md:px-8 md:pb-8">
-            <div className="text-xl font-bold tracking-[-0.04em] md:absolute md:left-8 md:top-6 md:text-2xl">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/30 via-transparent to-[#1A1A1A]" />
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 pt-safe">
+            <p className="text-4xl font-bold tracking-[-0.06em]">
               ZoneIn<span className="text-[#F5A623]">.</span>
+            </p>
+            <p className="mt-2 text-center text-sm font-medium text-[#CCCCCC]">
+              Know where to drive. Before you go.
+            </p>
+          </div>
+        </div>
+
+        <div className="relative -mt-8 rounded-t-[28px] bg-[#1A1A1A] px-6 pb-8 pt-8">
+          <h1 className="text-2xl font-bold tracking-[-0.05em]">
+            Built for London gig drivers
+          </h1>
+          <p className="mt-2 text-sm leading-6 text-[#888888]">
+            Real-time zone intelligence for Uber, Bolt, Deliveroo and Stuart.
+          </p>
+
+          <div className="mt-6 flex flex-col gap-3">
+            <Link className="bolt-btn-primary gap-2" href="/signup">
+              Get started free
+              <ArrowRight aria-hidden="true" size={16} strokeWidth={2.5} />
+            </Link>
+            <Link
+              className="bolt-btn-secondary"
+              href="/login"
+            >
+              Sign in
+            </Link>
+          </div>
+
+          <div className="mt-8 grid grid-cols-3 gap-3 text-center">
+            <div className="bolt-card p-3">
+              <p className="text-xl font-bold text-[#F5A623]">2min</p>
+              <p className="mt-0.5 text-[10px] font-bold text-[#888888]">
+                Updates
+              </p>
             </div>
-
-            <div className="mt-auto max-w-lg md:mt-0">
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-[#00FF94]">
-                Built for London gig drivers
+            <div className="bolt-card p-3">
+              <p className="text-xl font-bold text-[#00FF94]">33+</p>
+              <p className="mt-0.5 text-[10px] font-bold text-[#888888]">
+                Zones
               </p>
-              <h1 className="text-3xl font-bold leading-tight tracking-[-0.06em] text-white sm:text-4xl md:text-[40px]">
-                Know where to drive. Before you go.
-              </h1>
-              <p className="mt-3 max-w-md text-sm leading-6 text-[#CCCCCC] md:mt-4">
-                Real-time zone intelligence for Uber, Bolt, Deliveroo and Stuart
-                drivers across London.
+            </div>
+            <div className="bolt-card p-3">
+              <p className="text-xl font-bold text-white">4</p>
+              <p className="mt-0.5 text-[10px] font-bold text-[#888888]">
+                Apps
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="mt-5 flex flex-col gap-2.5 sm:flex-row md:mt-6">
-                <Link
-                  className="flex h-12 touch-manipulation items-center justify-center gap-2 rounded-lg bg-[#F5A623] px-5 text-sm font-bold uppercase tracking-[0.1em] text-[#0A0A0A] active:opacity-90"
-                  href="/signup"
-                >
-                  Get started free
-                  <ArrowRight aria-hidden="true" size={16} strokeWidth={2.5} />
-                </Link>
-                <Link
-                  className="flex h-12 touch-manipulation items-center justify-center rounded-lg border border-[#333333] bg-[#141414]/80 px-5 text-sm font-bold uppercase tracking-[0.1em] text-white backdrop-blur active:opacity-90"
-                  href="/login"
-                >
-                  Sign in
-                </Link>
+      {/* Desktop: professional marketing layout */}
+      <section className="hidden lg:block">
+        <div className="mx-auto max-w-7xl px-8 py-6">
+          <div className="flex items-center justify-between">
+            <p className="text-2xl font-bold tracking-[-0.04em]">
+              ZoneIn<span className="text-[#F5A623]">.</span>
+            </p>
+            <div className="flex items-center gap-3">
+              <Link
+                className="rounded-[14px] px-5 py-2.5 text-sm font-bold text-[#888888] hover:text-white"
+                href="/login"
+              >
+                Sign in
+              </Link>
+              <Link className="bolt-btn-primary !w-auto px-6" href="/signup">
+                Get started
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-12 px-8 pb-16 pt-8">
+          <div>
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-[#00FF94]">
+              Built for London gig drivers
+            </p>
+            <h1 className="text-5xl font-bold leading-tight tracking-[-0.06em]">
+              Know where to drive.
+              <br />
+              Before you go.
+            </h1>
+            <p className="mt-5 max-w-lg text-lg leading-8 text-[#888888]">
+              Real-time zone intelligence for Uber, Bolt, Deliveroo and Stuart
+              drivers across London.
+            </p>
+            <div className="mt-8 flex gap-3">
+              <Link className="bolt-btn-primary !w-auto gap-2 px-8" href="/signup">
+                Get started free
+                <ArrowRight aria-hidden="true" size={16} />
+              </Link>
+              <Link className="bolt-btn-secondary !w-auto px-8" href="/login">
+                Sign in
+              </Link>
+            </div>
+            <div className="mt-10 flex gap-8">
+              <div>
+                <p className="text-3xl font-bold text-[#F5A623]">2min</p>
+                <p className="text-sm text-[#888888]">Live updates</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-[#00FF94]">33+</p>
+                <p className="text-sm text-[#888888]">London zones</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-white">4</p>
+                <p className="text-sm text-[#888888]">Platforms</p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="border-t border-[#222222] px-5 py-6 md:py-8">
-        <div className="mx-auto grid max-w-4xl grid-cols-3 gap-3 text-center">
-          <div>
-            <p className="text-2xl font-bold text-[#F5A623] md:text-3xl">2min</p>
-            <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Live updates
-            </p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-[#00FF94] md:text-3xl">33+</p>
-            <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-              London zones
-            </p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-white md:text-3xl">4</p>
-            <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Platforms
-            </p>
+          <div className="relative h-[520px] overflow-hidden rounded-[28px] border border-[#2A2A2A]">
+            <Image
+              alt="London driver with zone map"
+              className="object-cover"
+              fill
+              priority
+              src={APP_IMAGES.heroDriver}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 to-transparent" />
           </div>
         </div>
       </section>
 
-      <section className="page-shell-wide pb-10 pt-2 md:pb-12">
-        <h2 className="mb-5 text-center text-xl font-bold tracking-[-0.04em] md:mb-6 md:text-2xl">
-          Everything a driver needs
-        </h2>
+      <section className="border-t border-[#2A2A2A] px-6 py-12 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="mb-8 text-center text-2xl font-bold tracking-[-0.04em] lg:text-left lg:text-3xl">
+            Everything a driver needs
+          </h2>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {FEATURES.map((feature) => {
-            const Icon = feature.icon;
+          <div className="grid gap-5 md:grid-cols-3">
+            {FEATURES.map((feature) => {
+              const Icon = feature.icon;
 
-            return (
-              <article
-                className="overflow-hidden rounded-xl border border-[#222222] bg-[#111111]"
-                key={feature.title}
-              >
-                <div className="relative h-32 w-full md:h-28">
-                  <Image
-                    alt={feature.title}
-                    className="object-cover"
-                    fill
-                    src={feature.image}
-                    unoptimized={!feature.local}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111] to-transparent" />
-                </div>
-                <div className="p-4">
-                  <div className="mb-2 flex items-center gap-2.5">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F5A623]/15">
-                      <Icon
-                        aria-hidden="true"
-                        className="text-[#F5A623]"
-                        size={16}
-                        strokeWidth={2.5}
-                      />
-                    </span>
-                    <h3 className="text-base font-bold">{feature.title}</h3>
+              return (
+                <article
+                  className="bolt-card overflow-hidden"
+                  key={feature.title}
+                >
+                  <div className="relative h-40 w-full">
+                    <Image
+                      alt={feature.title}
+                      className="object-cover"
+                      fill
+                      src={feature.image}
+                      unoptimized={!feature.local}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent" />
                   </div>
-                  <p className="text-xs leading-5 text-[#888888] md:text-sm">
-                    {feature.body}
-                  </p>
-                </div>
-              </article>
-            );
-          })}
+                  <div className="p-5">
+                    <div className="mb-3 flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#F5A623]/15">
+                        <Icon
+                          aria-hidden="true"
+                          className="text-[#F5A623]"
+                          size={18}
+                          strokeWidth={2.5}
+                        />
+                      </span>
+                      <h3 className="text-lg font-bold">{feature.title}</h3>
+                    </div>
+                    <p className="text-sm leading-6 text-[#888888]">
+                      {feature.body}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      <section className="border-t border-[#222222] px-5 py-8 md:py-10">
-        <div className="mx-auto max-w-md text-center">
-          <h2 className="text-xl font-bold tracking-[-0.04em] md:text-2xl">
+      <section className="border-t border-[#2A2A2A] px-6 py-14 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center lg:max-w-7xl">
+          <h2 className="text-2xl font-bold tracking-[-0.04em] lg:text-3xl">
             Stop guessing. Start earning.
           </h2>
-          <p className="mt-2 text-sm leading-5 text-[#888888]">
+          <p className="mt-3 text-sm leading-6 text-[#888888] lg:text-base">
             Set up your profile in under a minute and get zone recommendations
             instantly.
           </p>
           <Link
-            className="mt-4 flex h-12 touch-manipulation items-center justify-center rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.1em] text-[#0A0A0A] active:opacity-90"
+            className="bolt-btn-primary mx-auto mt-6 !w-auto px-10 lg:inline-flex"
             href="/signup"
           >
             Create free account

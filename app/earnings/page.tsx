@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import BottomNav from "@/components/BottomNav";
+import AppLayout from "@/components/AppLayout";
 import { useStoredZones } from "@/hooks/useStoredZones";
 
 export default function EarningsPage() {
@@ -38,39 +38,37 @@ export default function EarningsPage() {
 
   if (!isReady) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
+      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold text-[#888888]">
         Loading earnings...
       </main>
     );
   }
 
   return (
-    <main className="bg-[#0A0A0A] pb-28 pt-safe text-white">
-      <div className="page-shell-wide">
-        <h1 className="mb-4 text-2xl font-bold leading-tight tracking-[-0.05em] text-white">
-          Today&apos;s Shift
+    <AppLayout>
+      <div className="page-shell-wide py-6 lg:max-w-none lg:py-10">
+        <h1 className="mb-6 text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
+          Today&apos;s shift
         </h1>
 
-        <section className="mb-5 grid gap-3 md:grid-cols-3">
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Time Online
+        <section className="mb-6 grid gap-4 md:grid-cols-3">
+          <div className="bolt-card p-5">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+              Time online
             </p>
-            <p className="text-3xl font-bold tracking-[-0.06em] text-white">
-              2h 34m
-            </p>
+            <p className="text-3xl font-bold tracking-[-0.06em]">2h 34m</p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Est. Earnings
+          <div className="bolt-card p-5">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+              Est. earnings
             </p>
             <p className="text-3xl font-bold tracking-[-0.06em] text-[#F5A623]">
               £{totalEarnings.toFixed(2)}
             </p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Best Zone
+          <div className="bolt-card p-5">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+              Best zone
             </p>
             <p className="text-3xl font-bold tracking-[-0.06em] text-[#00FF94]">
               {bestZone}
@@ -78,15 +76,15 @@ export default function EarningsPage() {
           </div>
         </section>
 
-        <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-4">
-          <h2 className="mb-4 text-lg font-bold tracking-[-0.04em] text-white">
-            Earnings by Zone
+        <section className="bolt-card mb-6 p-5 lg:p-6">
+          <h2 className="mb-4 text-lg font-bold tracking-[-0.04em] lg:text-xl">
+            Earnings by zone
           </h2>
-          <div className="h-52 min-h-52 md:h-56">
+          <div className="h-52 min-h-52 lg:h-64">
             {isMounted ? (
               <ResponsiveContainer height="100%" width="100%">
                 <BarChart data={earningsData}>
-                  <CartesianGrid stroke="#222222" vertical={false} />
+                  <CartesianGrid stroke="#2A2A2A" vertical={false} />
                   <XAxis
                     axisLine={false}
                     dataKey="zone"
@@ -101,9 +99,9 @@ export default function EarningsPage() {
                   />
                   <Tooltip
                     contentStyle={{
-                      background: "#141414",
-                      border: "1px solid #222222",
-                      borderRadius: 12,
+                      background: "#1A1A1A",
+                      border: "1px solid #2A2A2A",
+                      borderRadius: 14,
                       color: "#FFFFFF",
                       fontWeight: 700,
                     }}
@@ -113,26 +111,24 @@ export default function EarningsPage() {
                   <Bar
                     dataKey="earnings"
                     fill="#F5A623"
-                    radius={[8, 8, 0, 0]}
+                    radius={[10, 10, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full rounded-lg border border-[#222222] bg-[#0A0A0A]" />
+              <div className="h-full rounded-[14px] border border-[#2A2A2A] bg-[#0A0A0A]" />
             )}
           </div>
         </section>
 
         <button
-          className="flex h-14 w-full touch-manipulation cursor-pointer items-center justify-center rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.12em] text-[#0A0A0A] active:opacity-80"
+          className="bolt-btn-primary max-w-md"
           onClick={() => router.push("/shift")}
           type="button"
         >
           Start new shift
         </button>
       </div>
-
-      <BottomNav />
-    </main>
+    </AppLayout>
   );
 }

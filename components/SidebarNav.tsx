@@ -1,56 +1,63 @@
 "use client";
 
+import { Clock, Map, PoundSterling, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/navigation";
-import MaterialIcon from "./MaterialIcon";
-import ZoneInLogo from "./ZoneInLogo";
+
+const ICONS = {
+  clock: Clock,
+  map: Map,
+  pound: PoundSterling,
+  user: User,
+};
 
 export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 z-50 hidden h-screen w-64 flex-col border-r border-primary-container bg-primary lg:flex">
-      <div className="flex h-16 items-center gap-2 border-b border-white/10 px-6">
-        <ZoneInLogo className="h-8 w-8 rounded-full" size={32} />
-        <span className="font-headline-md-mobile text-headline-md-mobile font-bold tracking-tighter text-on-primary">
-          ZoneIn
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[280px] flex-col border-r border-[#2A2A2A] bg-[#111111] lg:flex">
+      <div className="flex h-[72px] items-center gap-2 border-b border-[#2A2A2A] px-6">
+        <span className="text-2xl font-bold tracking-[-0.04em] text-white">
+          ZoneIn<span className="text-[#F5A623]">.</span>
         </span>
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 p-4">
         {NAV_ITEMS.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            pathname === item.href ||
+            (item.href !== "/zones" && pathname.startsWith(item.href)) ||
+            (item.href === "/zones" && pathname.startsWith("/zones"));
+          const Icon = ICONS[item.icon];
 
           return (
             <Link
               key={item.href}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 font-label-caps text-label-caps transition-colors ${
+              className={`flex items-center gap-3 rounded-[14px] px-4 py-3.5 text-sm font-bold transition-colors ${
                 isActive
-                  ? "bg-on-primary text-primary"
-                  : "text-on-primary/60 hover:bg-white/10 hover:text-on-primary"
+                  ? "bg-[#F5A623] text-[#0A0A0A]"
+                  : "text-[#888888] hover:bg-[#1A1A1A] hover:text-white"
               }`}
               href={item.href}
             >
-              <MaterialIcon icon={item.icon} />
+              <Icon aria-hidden="true" size={20} strokeWidth={2.5} />
               {item.label}
             </Link>
           );
         })}
       </nav>
 
-      <div className="border-t border-white/10 p-4">
-        <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+      <div className="border-t border-[#2A2A2A] p-4">
+        <div className="bolt-card p-4">
           <div className="mb-2 flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-secondary-container animate-pulse" />
-            <span className="font-label-caps text-[10px] uppercase text-on-primary/60">
-              Live Market
+            <span className="h-2 w-2 animate-pulse rounded-full bg-[#00FF94]" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
+              Live market
             </span>
           </div>
-          <p className="font-status-sm text-status-sm text-on-primary">
-            High demand in SE1
-          </p>
-          <p className="mt-1 font-label-caps text-[10px] uppercase text-on-primary/60">
+          <p className="text-sm font-bold text-white">High demand in SE1</p>
+          <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#555555]">
             Updated 2m ago
           </p>
         </div>

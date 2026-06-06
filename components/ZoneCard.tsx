@@ -1,11 +1,15 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { Zone } from "@/types";
 
 type ZoneCardProps = {
   zone: Zone;
   id?: string;
+  variant?: "card" | "row";
+  onSelect?: () => void;
+  selected?: boolean;
 };
 
 function getZoneSlug(name: string) {
@@ -23,72 +27,111 @@ function getPotentialBadge(potential: Zone["potential"]) {
     case "high":
       return {
         label: "HIGH",
-        className: "bg-[#00FF94] text-[#000000] border border-[#00FF94]",
+        className: "bg-[#00FF94]/15 text-[#00FF94] border border-[#00FF94]/40",
       };
     case "medium":
       return {
         label: "MEDIUM",
-        className: "bg-transparent text-[#F5A623] border border-[#F5A623]",
+        className: "bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/40",
       };
     case "low":
       return {
         label: "LOW",
-        className: "bg-transparent text-[#FF3B30] border border-[#FF3B30]",
+        className: "bg-[#FF3B30]/10 text-[#FF3B30] border border-[#FF3B30]/40",
       };
   }
 }
 
-export default function ZoneCard({ zone, id }: ZoneCardProps) {
+export default function ZoneCard({
+  zone,
+  id,
+  variant = "card",
+  onSelect,
+  selected = false,
+}: ZoneCardProps) {
   const badge = getPotentialBadge(zone.potential);
+  const href = `/zones/${getZoneSlug(zone.name)}`;
+
+  if (variant === "row") {
+    return (
+      <Link
+        className={`bolt-card flex touch-manipulation items-center gap-3 p-4 transition-colors active:opacity-90 ${
+          selected ? "border-[#F5A623] bg-[#F5A623]/8" : ""
+        }`}
+        href={href}
+        id={id ?? `zone-card-${getZoneSlug(zone.name)}`}
+        onClick={onSelect}
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="truncate text-base font-bold text-white">
+              {zone.name}
+            </h3>
+            <span
+              className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] ${badge.className}`}
+            >
+              {badge.label}
+            </span>
+          </div>
+          <p className="mt-1 text-xs font-medium text-[#888888]">
+            {formatDistance(zone.distance)} · {zone.surgeMultiplier}x surge ·{" "}
+            {zone.activeJobs} jobs
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <span className="text-lg font-bold text-[#F5A623]">
+            {zone.surgeMultiplier}x
+          </span>
+          <ChevronRight aria-hidden="true" className="text-[#555555]" size={18} />
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <article
-      className="flex w-[260px] flex-col gap-[10px] rounded-lg border border-[#2A2A2A] bg-[#111111] px-4 pb-3 pt-4"
+      className="bolt-card flex w-full flex-col gap-3 p-5 lg:max-w-none"
       id={id ?? `zone-card-${getZoneSlug(zone.name)}`}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-[22px] font-bold leading-tight text-white">
+        <h3 className="text-xl font-bold leading-tight text-white">
           {zone.name}
         </h3>
         <span
-          className={`shrink-0 rounded px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] ${badge.className}`}
+          className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.08em] ${badge.className}`}
         >
           {badge.label}
         </span>
       </div>
 
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#555555]">
+      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#555555]">
         {formatDistance(zone.distance)}
       </p>
 
-      <div className="h-px w-full bg-[#1E1E1E]" />
+      <p className="text-sm leading-relaxed text-[#888888]">{zone.reasoning}</p>
 
-      <p className="text-[13px] leading-[1.5] text-[#888888]">
-        {zone.reasoning}
-      </p>
-
-      <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-lg border border-[#2A2A2A] bg-[#0A0A0A] p-3">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-[14px] border border-[#2A2A2A] bg-[#0A0A0A] p-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
-            SURGE
+            Surge
           </p>
           <p className="text-2xl font-bold text-[#F5A623]">
             {zone.surgeMultiplier}x
           </p>
         </div>
-        <div className="rounded-lg border border-[#2A2A2A] bg-[#0A0A0A] p-3">
+        <div className="rounded-[14px] border border-[#2A2A2A] bg-[#0A0A0A] p-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
-            JOBS
+            Jobs
           </p>
           <p className="text-2xl font-bold text-[#00FF94]">{zone.activeJobs}</p>
         </div>
       </div>
 
       <Link
-        className="flex h-11 w-full touch-manipulation items-center justify-center rounded-md bg-[#F5A623] text-sm font-bold uppercase tracking-[1px] text-[#000000] active:opacity-90"
-        href={`/zones/${getZoneSlug(zone.name)}`}
+        className="bolt-btn-primary touch-manipulation"
+        href={href}
       >
-        HEAD HERE →
+        Head here →
       </Link>
     </article>
   );

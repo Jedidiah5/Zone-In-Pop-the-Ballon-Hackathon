@@ -137,223 +137,221 @@ export default function OnboardingWizard({
   };
 
   return (
-    <main className="bg-[#0A0A0A] text-white md:flex md:min-h-dvh md:items-start md:justify-center md:py-6">
-      <div className="mx-auto flex w-full max-w-lg flex-col md:rounded-2xl md:border md:border-[#222222] md:bg-[#111111]">
-      <div className="relative h-36 shrink-0 overflow-hidden md:h-28 md:rounded-t-2xl">
-        <Image
-          alt=""
-          className="object-cover"
-          fill
-          priority
-          src={STEP_IMAGES[step]}
-          unoptimized={step > 1}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A0A0A]" />
-        <div className="absolute left-5 top-safe pt-4 text-xl font-bold tracking-[-0.04em]">
-          ZoneIn<span className="text-[#F5A623]">.</span>
-        </div>
-      </div>
-
-      <div className="flex flex-1 flex-col px-5 pb-6 md:px-6 md:pb-6">
-        <div className="mb-4">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#555555]">
-              Step {step + 1} of {STEP_LABELS.length}
-            </p>
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#F5A623]">
-              {STEP_LABELS[step]}
-            </p>
-          </div>
-          <div className="h-1 overflow-hidden rounded-full bg-[#222222]">
-            <div
-              className="h-full rounded-full bg-[#F5A623] transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
+    <main className="min-h-dvh bg-[#0A0A0A] text-white lg:flex lg:items-center lg:justify-center lg:px-8 lg:py-10">
+      <div className="mx-auto flex w-full max-w-lg flex-col lg:max-w-5xl lg:flex-row lg:overflow-hidden lg:rounded-[28px] lg:border lg:border-[#2A2A2A]">
+        <div className="bolt-hero-curve relative h-[38dvh] shrink-0 overflow-hidden lg:h-auto lg:min-h-[560px] lg:w-[42%] lg:rounded-none">
+          <Image
+            alt=""
+            className="object-cover"
+            fill
+            priority
+            src={STEP_IMAGES[step]}
+            unoptimized={step > 1}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1A1A1A] lg:bg-gradient-to-r lg:from-transparent lg:to-[#1A1A1A]/80" />
+          <div className="absolute left-6 top-safe pt-4 text-xl font-bold tracking-[-0.04em] lg:left-8 lg:text-2xl">
+            ZoneIn<span className="text-[#F5A623]">.</span>
           </div>
         </div>
 
-        <div className="flex-1">
-          {step === 0 && (
-            <div>
-              <h1 className="text-2xl font-bold tracking-[-0.05em] md:text-3xl">
-                Hey driver 👋
-              </h1>
-              <p className="mt-2 text-sm leading-5 text-[#888888]">
-                Let&apos;s set up your profile so ZoneIn can find the best
-                earning zones for you.
+        <div className="relative -mt-6 flex flex-1 flex-col rounded-t-[28px] bg-[#1A1A1A] px-6 pb-8 pt-6 lg:mt-0 lg:rounded-none lg:px-8 lg:py-8">
+          <div className="mb-5">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
+                Step {step + 1} of {STEP_LABELS.length}
               </p>
-              <label
-                className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.14em] text-[#555555]"
-                htmlFor="full-name"
-              >
-                Your name
-              </label>
-              <div className="relative">
-                <User
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623]"
-                  size={20}
-                />
-                <input
-                  autoComplete="name"
-                  className="h-12 w-full rounded-lg border border-[#222222] bg-[#141414] pl-12 pr-4 text-base font-bold outline-none focus:border-[#F5A623]"
-                  id="full-name"
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. James"
-                  value={fullName}
-                />
-              </div>
+              <p className="text-xs font-bold text-[#F5A623]">{STEP_LABELS[step]}</p>
             </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-[#2A2A2A]">
+              <div
+                className="h-full rounded-full bg-[#F5A623] transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="flex-1">
+            {step === 0 && (
+              <div>
+                <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
+                  Hey driver 👋
+                </h1>
+                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                  Let&apos;s set up your profile so ZoneIn can find the best
+                  earning zones for you.
+                </p>
+                <label
+                  className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.12em] text-[#555555]"
+                  htmlFor="full-name"
+                >
+                  Your name
+                </label>
+                <div className="relative">
+                  <User
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623]"
+                    size={20}
+                  />
+                  <input
+                    autoComplete="name"
+                    className="bolt-input pl-12"
+                    id="full-name"
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="e.g. James"
+                    value={fullName}
+                  />
+                </div>
+              </div>
+            )}
+
+            {step === 1 && (
+              <div>
+                <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
+                  Your platform
+                </h1>
+                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                  Which app do you earn on? We&apos;ll tailor zone intel to your
+                  platform.
+                </p>
+                <div className="mt-5">
+                  <PlatformSelector onSelect={setPlatform} selected={platform} />
+                </div>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div>
+                <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
+                  Where are you?
+                </h1>
+                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                  Your current area helps us find nearby high-demand zones.
+                </p>
+                <label
+                  className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.12em] text-[#555555]"
+                  htmlFor="location"
+                >
+                  Current area
+                </label>
+                <div className="relative mb-4">
+                  <MapPin
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623]"
+                    size={20}
+                  />
+                  <input
+                    className="bolt-input pl-12"
+                    id="location"
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g. Shoreditch, Hackney"
+                    value={location}
+                  />
+                </div>
+                <button
+                  className="bolt-btn-secondary w-full gap-2"
+                  disabled={isLocating}
+                  onClick={handleLocate}
+                  type="button"
+                >
+                  <LocateFixed
+                    aria-hidden="true"
+                    className={isLocating ? "animate-pulse text-[#F5A623]" : "text-[#F5A623]"}
+                    size={18}
+                  />
+                  {isLocating ? "Locating..." : "Use my current location"}
+                </button>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div>
+                <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
+                  Your setup
+                </h1>
+                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                  Vehicle and shift info helps us rank zones that suit how you
+                  drive.
+                </p>
+
+                <p className="mb-3 mt-5 text-xs font-bold uppercase tracking-[0.12em] text-[#555555]">
+                  Vehicle type
+                </p>
+                <div className="mb-6 grid grid-cols-2 gap-3">
+                  {VEHICLES.map((vehicle) => (
+                    <button
+                      key={vehicle.id}
+                      className={`flex h-20 touch-manipulation flex-col items-center justify-center gap-1 rounded-[20px] border text-sm font-bold active:opacity-80 ${
+                        vehicleType === vehicle.id
+                          ? "border-[#F5A623] bg-[#F5A623]/12 text-white"
+                          : "border-[#2A2A2A] bg-[#1E1E1E] text-[#888888]"
+                      }`}
+                      onClick={() => setVehicleType(vehicle.id)}
+                      type="button"
+                    >
+                      <span className="text-2xl">{vehicle.emoji}</span>
+                      {vehicle.label}
+                    </button>
+                  ))}
+                </div>
+
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#555555]">
+                  Usual shift
+                </p>
+                <div className="space-y-2">
+                  {SHIFTS.map((shift) => (
+                    <button
+                      key={shift.id}
+                      className={`flex w-full touch-manipulation items-center justify-between rounded-[20px] border px-4 py-3.5 text-left active:opacity-80 ${
+                        shiftPreference === shift.id
+                          ? "border-[#F5A623] bg-[#F5A623]/12"
+                          : "border-[#2A2A2A] bg-[#1E1E1E]"
+                      }`}
+                      onClick={() => setShiftPreference(shift.id)}
+                      type="button"
+                    >
+                      <span className="font-bold">{shift.label}</span>
+                      <span className="text-xs text-[#888888]">{shift.time}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {(stepError || error) && (
+            <p
+              className="mb-4 rounded-[14px] border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
+              role="alert"
+            >
+              {stepError || error}
+            </p>
           )}
 
-          {step === 1 && (
-            <div>
-              <h1 className="text-3xl font-bold tracking-[-0.05em]">
-                Your platform
-              </h1>
-              <p className="mt-3 text-sm leading-6 text-[#888888]">
-                Which app do you earn on? We&apos;ll tailor zone intel to your
-                platform.
-              </p>
-              <div className="mt-5">
-                <PlatformSelector onSelect={setPlatform} selected={platform} />
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div>
-              <h1 className="text-3xl font-bold tracking-[-0.05em]">
-                Where are you?
-              </h1>
-              <p className="mt-3 text-sm leading-6 text-[#888888]">
-                Your current area helps us find nearby high-demand zones.
-              </p>
-              <label
-                className="mb-3 mt-8 block text-xs font-bold uppercase tracking-[0.14em] text-[#555555]"
-                htmlFor="location"
-              >
-                Current area
-              </label>
-              <div className="relative mb-4">
-                <MapPin
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623]"
-                  size={20}
-                />
-                <input
-                  className="h-14 w-full rounded-lg border border-[#222222] bg-[#141414] pl-12 pr-4 text-base font-bold outline-none focus:border-[#F5A623]"
-                  id="location"
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="e.g. Shoreditch, Hackney"
-                  value={location}
-                />
-              </div>
+          <div className="mt-5 flex gap-3">
+            {step > 0 && (
               <button
-                className="flex h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-[#222222] bg-[#141414] text-sm font-bold uppercase tracking-[0.08em] active:opacity-80 disabled:opacity-60"
-                disabled={isLocating}
-                onClick={handleLocate}
+                className="bolt-btn-secondary flex-1"
+                disabled={isLoading}
+                onClick={handleBack}
                 type="button"
               >
-                <LocateFixed
-                  aria-hidden="true"
-                  className={isLocating ? "animate-pulse text-[#F5A623]" : "text-[#F5A623]"}
-                  size={18}
-                />
-                {isLocating ? "Locating..." : "Use my current location"}
+                Back
               </button>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div>
-              <h1 className="text-3xl font-bold tracking-[-0.05em]">
-                Your setup
-              </h1>
-              <p className="mt-3 text-sm leading-6 text-[#888888]">
-                Vehicle and shift info helps us rank zones that suit how you
-                drive.
-              </p>
-
-              <p className="mb-3 mt-8 text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
-                Vehicle type
-              </p>
-              <div className="mb-6 grid grid-cols-2 gap-3">
-                {VEHICLES.map((vehicle) => (
-                  <button
-                    key={vehicle.id}
-                    className={`flex h-20 touch-manipulation flex-col items-center justify-center gap-1 rounded-xl border text-sm font-bold active:opacity-80 ${
-                      vehicleType === vehicle.id
-                        ? "border-[#F5A623] bg-[#F5A623]/10 text-white"
-                        : "border-[#222222] bg-[#141414] text-[#888888]"
-                    }`}
-                    onClick={() => setVehicleType(vehicle.id)}
-                    type="button"
-                  >
-                    <span className="text-2xl">{vehicle.emoji}</span>
-                    {vehicle.label}
-                  </button>
-                ))}
-              </div>
-
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
-                Usual shift
-              </p>
-              <div className="space-y-2">
-                {SHIFTS.map((shift) => (
-                  <button
-                    key={shift.id}
-                    className={`flex w-full touch-manipulation items-center justify-between rounded-xl border px-4 py-3 text-left active:opacity-80 ${
-                      shiftPreference === shift.id
-                        ? "border-[#F5A623] bg-[#F5A623]/10"
-                        : "border-[#222222] bg-[#141414]"
-                    }`}
-                    onClick={() => setShiftPreference(shift.id)}
-                    type="button"
-                  >
-                    <span className="font-bold">{shift.label}</span>
-                    <span className="text-xs text-[#888888]">{shift.time}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {(stepError || error) && (
-          <p
-            className="mb-4 rounded-lg border border-[#FF3B30] bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
-            role="alert"
-          >
-            {stepError || error}
-          </p>
-        )}
-
-        <div className="mt-4 flex gap-3">
-          {step > 0 && (
+            )}
             <button
-              className="h-12 flex-1 touch-manipulation rounded-lg border border-[#222222] bg-[#141414] text-sm font-bold uppercase tracking-[0.08em] active:opacity-80"
-              disabled={isLoading}
-              onClick={handleBack}
+              className="bolt-btn-primary flex-[2] disabled:opacity-70"
+              disabled={isLoading || isLocating}
+              onClick={handleNext}
               type="button"
             >
-              Back
+              {isLoading
+                ? "Finding zones..."
+                : step === STEP_LABELS.length - 1
+                  ? "Find my zones →"
+                  : "Continue"}
             </button>
-          )}
-          <button
-            className="h-12 flex-[2] touch-manipulation rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.08em] text-[#0A0A0A] active:opacity-80 disabled:opacity-70"
-            disabled={isLoading || isLocating}
-            onClick={handleNext}
-            type="button"
-          >
-            {isLoading
-              ? "Finding zones..."
-              : step === STEP_LABELS.length - 1
-                ? "Find my zones →"
-                : "Continue"}
-          </button>
+          </div>
         </div>
-      </div>
       </div>
     </main>
   );

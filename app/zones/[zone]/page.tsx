@@ -3,7 +3,7 @@
 import { ArrowLeft, Navigation } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import BottomNav from "@/components/BottomNav";
+import AppLayout from "@/components/AppLayout";
 import { useStoredZones } from "@/hooks/useStoredZones";
 import { updateProfile } from "@/lib/database";
 import { saveActiveZone } from "@/lib/storage";
@@ -14,18 +14,18 @@ function getPotentialConfig(potential: Zone["potential"]) {
   switch (potential) {
     case "high":
       return {
-        label: "HIGH POTENTIAL",
-        className: "border-[#00FF94] bg-[#00FF94]/10 text-[#00FF94]",
+        label: "High potential",
+        className: "border-[#00FF94]/40 bg-[#00FF94]/10 text-[#00FF94]",
       };
     case "medium":
       return {
-        label: "MEDIUM",
-        className: "border-[#F5A623] bg-[#F5A623]/10 text-[#F5A623]",
+        label: "Medium",
+        className: "border-[#F5A623]/40 bg-[#F5A623]/10 text-[#F5A623]",
       };
     case "low":
       return {
-        label: "LOW",
-        className: "border-[#FF3B30] bg-[#FF3B30]/10 text-[#FF3B30]",
+        label: "Low",
+        className: "border-[#FF3B30]/40 bg-[#FF3B30]/10 text-[#FF3B30]",
       };
   }
 }
@@ -69,7 +69,7 @@ export default function ZoneDetailPage() {
 
   if (!isReady) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
+      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold text-[#888888]">
         Loading zone...
       </main>
     );
@@ -77,40 +77,41 @@ export default function ZoneDetailPage() {
 
   if (notFound || !zone) {
     return (
-      <main className="flex min-h-dvh flex-col bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
-        <button
-          className="mb-8 flex touch-manipulation items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:opacity-80"
-          onClick={() => router.push("/zones")}
-          type="button"
-        >
-          <ArrowLeft aria-hidden="true" size={22} strokeWidth={2.5} />
-          Back to zones
-        </button>
-        <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <p className="text-xl font-bold text-white">Zone not found</p>
-          <p className="mt-2 text-sm text-[#888888]">
-            Run a new search to refresh your zone list.
-          </p>
+      <AppLayout>
+        <div className="page-shell-wide flex min-h-[70dvh] flex-col py-6">
           <button
-            className="mt-6 h-12 touch-manipulation rounded-lg bg-[#F5A623] px-6 text-sm font-bold uppercase tracking-[0.1em] text-[#0A0A0A] active:opacity-80"
-            onClick={() => router.push("/onboarding")}
+            className="mb-8 flex touch-manipulation items-center gap-3 text-sm font-bold text-[#888888] active:opacity-80"
+            onClick={() => router.push("/zones")}
             type="button"
           >
-            New search
+            <ArrowLeft aria-hidden="true" size={22} strokeWidth={2.5} />
+            Back to zones
           </button>
+          <div className="flex flex-1 flex-col items-center justify-center text-center">
+            <p className="text-xl font-bold">Zone not found</p>
+            <p className="mt-2 text-sm text-[#888888]">
+              Run a new search to refresh your zone list.
+            </p>
+            <button
+              className="bolt-btn-primary mt-6 !w-auto px-8"
+              onClick={() => router.push("/onboarding")}
+              type="button"
+            >
+              New search
+            </button>
+          </div>
         </div>
-        <BottomNav />
-      </main>
+      </AppLayout>
     );
   }
 
   const potential = getPotentialConfig(zone.potential);
 
   return (
-    <main className="bg-[#0A0A0A] pb-36 pt-safe text-white">
-      <div className="page-shell-wide">
+    <AppLayout>
+      <div className="page-shell-wide pb-32 py-6 lg:max-w-4xl lg:pb-10 lg:py-10">
         <button
-          className="mb-4 flex touch-manipulation items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:opacity-80"
+          className="mb-5 flex touch-manipulation items-center gap-3 text-sm font-bold text-[#888888] active:opacity-80"
           onClick={() => router.push("/zones")}
           type="button"
         >
@@ -118,49 +119,43 @@ export default function ZoneDetailPage() {
           Back
         </button>
 
-        <header className="mb-4">
-          <h1 className="text-2xl font-bold leading-tight tracking-[-0.05em] text-white md:text-3xl">
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-4xl">
             {zone.name}
           </h1>
-          <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
-            {zone.distance}
-          </p>
+          <p className="mt-2 text-sm text-[#888888]">{zone.distance}</p>
           <div
-            className={`mt-4 inline-flex rounded px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] ${potential.className}`}
+            className={`mt-4 inline-flex rounded-full border px-4 py-2 text-xs font-bold ${potential.className}`}
           >
             {potential.label}
           </div>
         </header>
 
-        <section className="mb-4 grid grid-cols-3 gap-2 md:gap-3">
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-3 md:p-4">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
+        <section className="mb-5 grid grid-cols-3 gap-3">
+          <div className="bolt-card p-4">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#888888]">
               Surge
             </p>
-            <p className="text-2xl font-bold tracking-[-0.05em] text-[#F5A623]">
+            <p className="text-2xl font-bold text-[#F5A623]">
               {zone.surgeMultiplier}x
             </p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-3 md:p-4">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Active Jobs
+          <div className="bolt-card p-4">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#888888]">
+              Active jobs
             </p>
-            <p className="text-2xl font-bold tracking-[-0.05em] text-[#00FF94]">
-              {zone.activeJobs}
-            </p>
+            <p className="text-2xl font-bold text-[#00FF94]">{zone.activeJobs}</p>
           </div>
-          <div className="rounded-xl border border-[#222222] bg-[#141414] p-3 md:p-4">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Demand Window
+          <div className="bolt-card p-4">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#888888]">
+              Demand window
             </p>
-            <p className="text-2xl font-bold tracking-[-0.05em] text-white">
-              ~{zone.demandWindowMinutes}m
-            </p>
+            <p className="text-2xl font-bold">~{zone.demandWindowMinutes}m</p>
           </div>
         </section>
 
-        <section className="mb-4 rounded-xl border border-[#222222] bg-[#141414] p-4">
-          <h2 className="mb-3 text-lg font-bold tracking-[-0.04em] text-white">
+        <section className="bolt-card mb-5 p-5">
+          <h2 className="mb-3 text-lg font-bold tracking-[-0.04em]">
             Why this zone?
           </h2>
           <p className="text-[15px] leading-7 text-[#888888]">
@@ -168,12 +163,12 @@ export default function ZoneDetailPage() {
           </p>
         </section>
 
-        <section className="rounded-xl border border-[#222222] bg-[#141414] p-4">
-          <h2 className="mb-4 text-lg font-bold tracking-[-0.04em] text-white">
+        <section className="bolt-card p-5">
+          <h2 className="mb-4 text-lg font-bold tracking-[-0.04em]">
             Watch out for
           </h2>
           <div className="space-y-3 text-sm font-bold text-[#888888]">
-            <div className="flex items-start justify-between gap-4 border-b border-[#222222] pb-3">
+            <div className="flex items-start justify-between gap-4 border-b border-[#2A2A2A] pb-3">
               <span>Congestion charge</span>
               <span
                 className={
@@ -183,7 +178,7 @@ export default function ZoneDetailPage() {
                 {zone.congestionWarning ? "Check boundary" : "Not flagged"}
               </span>
             </div>
-            <div className="flex items-start justify-between gap-4 border-b border-[#222222] pb-3">
+            <div className="flex items-start justify-between gap-4 border-b border-[#2A2A2A] pb-3">
               <span>Known dead streets</span>
               <span className="max-w-[180px] text-right text-white">
                 Avoid blocked side roads after pickups
@@ -197,9 +192,9 @@ export default function ZoneDetailPage() {
         </section>
       </div>
 
-      <div className="fixed bottom-[72px] left-0 right-0 border-t border-[#222222] bg-[#0A0A0A] p-5">
+      <div className="fixed bottom-[5.5rem] left-4 right-4 z-40 lg:bottom-8 lg:left-auto lg:right-8 lg:max-w-md">
         <button
-          className="flex h-14 w-full touch-manipulation cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.12em] text-[#0A0A0A] active:opacity-80"
+          className="bolt-btn-primary gap-2 shadow-[0_8px_32px_rgba(0,0,0,0.45)]"
           onClick={handleStartDriving}
           type="button"
         >
@@ -207,8 +202,6 @@ export default function ZoneDetailPage() {
           Start driving here
         </button>
       </div>
-
-      <BottomNav />
-    </main>
+    </AppLayout>
   );
 }
