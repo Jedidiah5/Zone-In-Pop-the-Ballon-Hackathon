@@ -102,12 +102,12 @@ function ZonesPageContent() {
   }, [zones]);
 
   const guestBanner = showGuestBanner ? (
-    <div className="fixed left-0 right-0 top-0 z-[90] flex items-center justify-between gap-3 border-b border-[#F5A623]/30 bg-[#F5A623]/15 px-4 pb-2 pt-safe">
+    <div className="fixed left-0 right-0 top-0 z-[90] flex items-center justify-between gap-3 border-b border-[#E5E5E5] bg-[#F7F7F7] px-4 pb-2 pt-safe">
       <p className="text-xs font-bold text-black lg:text-sm">
         You&apos;re on the free preview — upgrade for full shift intelligence
       </p>
       <button
-        className="shrink-0 text-xs font-bold text-[#F5A623] active:opacity-80"
+        className="shrink-0 text-xs font-bold text-black underline-offset-2 active:opacity-80"
         onClick={() => setShowPaywall(true)}
         type="button"
       >

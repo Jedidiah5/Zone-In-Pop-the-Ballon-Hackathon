@@ -200,7 +200,7 @@ export default function ProfilePage() {
               </span>
             </div>
             <p className="text-sm font-bold text-[#666666]">
-              £2.99/month · cancel anytime
+              £2/month · cancel anytime
             </p>
           </section>
         </div>
