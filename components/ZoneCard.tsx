@@ -1,89 +1,95 @@
 "use client";
 
+import Link from "next/link";
 import type { Zone } from "@/types";
-import MaterialIcon from "./MaterialIcon";
 
 type ZoneCardProps = {
   zone: Zone;
+  id?: string;
 };
 
-function getPotentialConfig(potential: Zone["potential"]) {
+function getZoneSlug(name: string) {
+  return encodeURIComponent(
+    name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")
+  );
+}
+
+function formatDistance(distance: string) {
+  return distance.replace(/miles/gi, "MI");
+}
+
+function getPotentialBadge(potential: Zone["potential"]) {
   switch (potential) {
     case "high":
       return {
-        label: "HIGH POTENTIAL",
-        dotClass: "bg-secondary-container animate-pulse",
-        textClass: "text-on-primary",
+        label: "HIGH",
+        className: "bg-[#00FF94] text-[#000000] border border-[#00FF94]",
       };
     case "medium":
       return {
         label: "MEDIUM",
-        dotClass: "bg-on-primary/40",
-        textClass: "text-on-primary/60",
+        className: "bg-transparent text-[#F5A623] border border-[#F5A623]",
       };
     case "low":
       return {
         label: "LOW",
-        dotClass: "bg-on-primary/30",
-        textClass: "text-on-primary/50",
+        className: "bg-transparent text-[#FF3B30] border border-[#FF3B30]",
       };
   }
 }
 
-export default function ZoneCard({ zone }: ZoneCardProps) {
-  const potential = getPotentialConfig(zone.potential);
+export default function ZoneCard({ zone, id }: ZoneCardProps) {
+  const badge = getPotentialBadge(zone.potential);
 
   return (
-    <div className="border border-white/10 bg-white/5 p-4 transition-all active:scale-[0.98] lg:p-5 lg:hover:border-white/20 lg:hover:bg-white/[0.08]">
-      <div className="mb-3 flex items-start justify-between">
-        <div>
-          <div className="mb-1 flex items-center gap-2">
-            <MaterialIcon className="text-[20px] text-on-primary" icon="explore" />
-            <h3 className="font-headline-md-mobile text-headline-md-mobile font-bold text-on-primary lg:font-headline-md lg:text-headline-md">
-              {zone.name}
-            </h3>
-          </div>
-          <p className="font-label-caps text-label-caps text-on-primary/50">
-            {zone.distance}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 border border-white/10 bg-white/5 px-2 py-1">
-          <span className={`h-2 w-2 rounded-full ${potential.dotClass}`} />
-          <span
-            className={`font-label-caps text-label-caps ${potential.textClass}`}
-          >
-            {potential.label}
-          </span>
-        </div>
+    <article
+      className="flex w-[260px] flex-col gap-[10px] rounded-lg border border-[#2A2A2A] bg-[#111111] px-4 pb-3 pt-4"
+      id={id ?? `zone-card-${getZoneSlug(zone.name)}`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-[22px] font-bold leading-tight text-white">
+          {zone.name}
+        </h3>
+        <span
+          className={`shrink-0 rounded px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] ${badge.className}`}
+        >
+          {badge.label}
+        </span>
       </div>
 
-      <div className="mb-3 h-px w-full bg-white/10" />
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#555555]">
+        {formatDistance(zone.distance)}
+      </p>
 
-      <div className="mb-4 flex items-start gap-2">
-        <MaterialIcon className="text-[18px] text-on-primary/40" icon="auto_awesome" />
-        <p className="font-body-md text-sm leading-snug text-on-primary/60">
-          {zone.reasoning}
-        </p>
-      </div>
+      <div className="h-px w-full bg-[#1E1E1E]" />
+
+      <p className="text-[13px] leading-[1.5] text-[#888888]">
+        {zone.reasoning}
+      </p>
 
       <div className="grid grid-cols-2 gap-2">
-        <div className="border border-white/10 bg-white/5 px-3 py-2">
-          <p className="font-label-caps text-[10px] uppercase text-on-primary/50">
-            Surge
+        <div className="rounded-lg border border-[#2A2A2A] bg-[#0A0A0A] p-3">
+          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
+            SURGE
           </p>
-          <p className="font-status-sm text-status-sm font-bold text-on-primary">
+          <p className="text-2xl font-bold text-[#F5A623]">
             {zone.surgeMultiplier}x
           </p>
         </div>
-        <div className="border border-white/10 bg-white/5 px-3 py-2">
-          <p className="font-label-caps text-[10px] uppercase text-on-primary/50">
-            Active Jobs
+        <div className="rounded-lg border border-[#2A2A2A] bg-[#0A0A0A] p-3">
+          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
+            JOBS
           </p>
-          <p className="font-status-sm text-status-sm font-bold text-on-primary">
-            {zone.activeJobs}
-          </p>
+          <p className="text-2xl font-bold text-[#00FF94]">{zone.activeJobs}</p>
         </div>
       </div>
-    </div>
+
+      <Link
+        className="flex h-11 w-full items-center justify-center rounded-md bg-[#F5A623] text-sm font-bold uppercase tracking-[1px] text-[#000000] hover:opacity-90"
+        href={`/zones/${getZoneSlug(zone.name)}`}
+      >
+        HEAD HERE →
+      </Link>
+    </article>
   );
 }
