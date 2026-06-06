@@ -3,8 +3,10 @@ import type { Platform, Zone } from "@/types";
 
 const PLATFORMS: Platform[] = ["uber", "bolt", "deliveroo", "stuart"];
 
-// gemini-1.5-flash is retired; gemini-2.0-flash is the current equivalent
-const GEMINI_MODEL = "gemini-2.0-flash";
+// Free-tier models (AI Studio, no billing): gemini-2.5-flash-lite (30 RPM) or gemini-2.5-flash (15 RPM)
+// gemini-2.0-flash returns quota limit:0 on many free keys — do not use
+const GEMINI_MODEL =
+  process.env.GEMINI_MODEL ?? "gemini-2.5-flash-lite";
 
 const SYSTEM_PROMPT =
   "You are ZoneIn, an AI assistant for gig economy drivers in London. You analyse demand patterns, time of day, day of week, weather context, and local events to recommend the best zones for drivers to maximise their earnings right now. Always respond in valid JSON only, no markdown, no explanation.";
@@ -108,6 +110,10 @@ export async function getZoneRecommendations(
     throw new Error("GEMINI_API_KEY is not configured");
   }
 
+  console.log(
+    `[ZoneIn Gemini] Calling ${GEMINI_MODEL} for ${platform} near ${trimmedLocation} (key: ${apiKey.slice(0, 6)}...)`
+  );
+
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
@@ -124,7 +130,9 @@ export async function getZoneRecommendations(
       throw new Error("Gemini returned an empty response");
     }
 
-    return parseZonesResponse(text);
+    const zones = parseZonesResponse(text);
+    console.log(`[ZoneIn Gemini] Received ${zones.length} zones`);
+    return zones;
   } catch (error) {
     if (error instanceof SyntaxError) {
       throw new Error("Failed to parse Gemini response as JSON");
@@ -132,6 +140,16 @@ export async function getZoneRecommendations(
 
     if (error instanceof Error) {
       const message = error.message;
+
+      if (
+        message.includes("API key expired") ||
+        message.includes("API_KEY_INVALID") ||
+        message.includes("API key not valid")
+      ) {
+        throw new Error(
+          "Your Gemini API key is expired or invalid. Create a new one at https://aistudio.google.com/apikey and update .env.local, then restart the dev server."
+        );
+      }
 
       if (message.includes("429") || message.includes("Too Many Requests")) {
         throw new Error(
@@ -145,13 +163,9 @@ export async function getZoneRecommendations(
         );
       }
 
-      if (
-        message.includes("API key not valid") ||
-        message.includes("401") ||
-        message.includes("403")
-      ) {
+      if (message.includes("401") || message.includes("403")) {
         throw new Error(
-          "Invalid Gemini API key. Create one at https://aistudio.google.com/apikey (starts with AIza) and add it to .env.local"
+          "Gemini API access denied. Create a new key at https://aistudio.google.com/apikey and add it to .env.local"
         );
       }
 

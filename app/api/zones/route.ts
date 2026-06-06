@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getZoneRecommendations } from "@/lib/gemini";
+import { MOCK_ZONES } from "@/lib/mockZones";
 import type { Platform } from "@/types";
+
+function shouldUseMockFallback(message: string): boolean {
+  return (
+    message.includes("rate limit") ||
+    message.includes("quota") ||
+    message.includes("Too Many Requests") ||
+    message.includes("expired") ||
+    message.includes("invalid") ||
+    message.includes("not configured")
+  );
+}
+
+function mockResponse(reason: string) {
+  console.warn(`[ZoneIn API] Using mock data — ${reason}`);
+  return NextResponse.json({ zones: MOCK_ZONES, source: "mock", reason });
+}
 
 function getErrorStatus(message: string): number {
   if (message.includes("Invalid platform") || message.includes("required")) {
@@ -24,6 +41,8 @@ export async function POST(request: NextRequest) {
     const platform = body.platform as string | undefined;
     const location = body.location as string | undefined;
 
+    console.log("[ZoneIn API] POST /api/zones", { platform, location });
+
     if (!platform || !location) {
       return NextResponse.json(
         { error: "platform and location are required" },
@@ -32,12 +51,19 @@ export async function POST(request: NextRequest) {
     }
 
     const zones = await getZoneRecommendations(platform, location);
-    return NextResponse.json(zones);
+    console.log("[ZoneIn API] Gemini success —", zones.length, "zones");
+    return NextResponse.json({ zones, source: "gemini" });
   } catch (error) {
     const message =
       error instanceof Error
         ? error.message
         : "Failed to fetch zone recommendations";
+
+    console.error("[ZoneIn API] Gemini error:", message);
+
+    if (shouldUseMockFallback(message)) {
+      return mockResponse(message);
+    }
 
     return NextResponse.json(
       { error: message },
@@ -58,16 +84,25 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    console.log("[ZoneIn API] GET /api/zones", { platform, location });
+
     const zones = await getZoneRecommendations(
       platform as Platform,
       location
     );
-    return NextResponse.json(zones);
+    console.log("[ZoneIn API] Gemini success —", zones.length, "zones");
+    return NextResponse.json({ zones, source: "gemini" });
   } catch (error) {
     const message =
       error instanceof Error
         ? error.message
         : "Failed to fetch zone recommendations";
+
+    console.error("[ZoneIn API] Gemini error:", message);
+
+    if (shouldUseMockFallback(message)) {
+      return mockResponse(message);
+    }
 
     return NextResponse.json(
       { error: message },

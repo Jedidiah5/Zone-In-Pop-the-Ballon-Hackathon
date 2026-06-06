@@ -9,9 +9,13 @@ import type { Zone } from "@/types";
 
 export default function ZonesPage() {
   const [zones, setZones] = useState<Zone[]>([]);
+  const [dataSource, setDataSource] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("zonein_results");
+    const source = localStorage.getItem("zonein_source");
+    setDataSource(source);
+
     if (stored) {
       try {
         setZones(JSON.parse(stored) as Zone[]);
@@ -35,6 +39,26 @@ export default function ZonesPage() {
       <AppHeader title="Top Earning Zones" />
       <main className="flex-1 bg-primary-container px-container-padding pb-24 pt-6 lg:px-8 lg:pb-8 lg:pt-8">
         <div className="mx-auto max-w-6xl">
+          {dataSource === "mock" && (
+            <div className="mb-6 border border-secondary-container/50 bg-secondary-container/10 px-4 py-3">
+              <p className="font-label-caps text-[10px] uppercase text-secondary-container">
+                Demo data
+              </p>
+              <p className="font-body-md text-sm text-on-primary/80">
+                Gemini API unavailable — showing sample zones. Check your API key
+                in .env.local and restart the dev server.
+              </p>
+            </div>
+          )}
+
+          {dataSource === "gemini" && (
+            <div className="mb-6 border border-white/10 bg-white/5 px-4 py-3">
+              <p className="font-body-md text-sm text-on-primary/80">
+                Live AI recommendations from Gemini
+              </p>
+            </div>
+          )}
+
           <div className="mb-8 lg:mb-10">
             <p className="mb-1 font-label-caps text-label-caps text-on-primary/60">
               CURRENT RANKING

@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Geist:wght@600;700&display=swap"
@@ -40,6 +40,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} min-h-screen bg-[#FAFAFA] font-body-md text-on-surface antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>
