@@ -1,12 +1,34 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import AppHeader from "@/components/AppHeader";
 import AppShell from "@/components/AppShell";
 import MarketStats from "@/components/MarketStats";
 import ZoneCard from "@/components/ZoneCard";
-import { MOCK_ZONES } from "@/lib/mockZones";
+import type { Zone } from "@/types";
 
 export default function ZonesPage() {
-  const avgSurge = MOCK_ZONES[0]?.surgeMultiplier ?? 1.8;
-  const activeJobs = MOCK_ZONES[0]?.activeJobs ?? 422;
+  const [zones, setZones] = useState<Zone[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("zonein_results");
+    if (stored) {
+      try {
+        setZones(JSON.parse(stored) as Zone[]);
+      } catch {
+        setZones([]);
+      }
+    }
+  }, []);
+
+  const avgSurge =
+    zones.length > 0
+      ? zones.reduce((sum, z) => sum + z.surgeMultiplier, 0) / zones.length
+      : 0;
+  const activeJobs =
+    zones.length > 0
+      ? zones.reduce((sum, z) => sum + z.activeJobs, 0)
+      : 0;
 
   return (
     <AppShell>
@@ -28,32 +50,43 @@ export default function ZonesPage() {
             </div>
           </div>
 
-          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-            <div className="flex flex-col gap-stack-gap lg:col-span-2 xl:grid xl:grid-cols-2 xl:gap-4">
-              {MOCK_ZONES.map((zone) => (
-                <ZoneCard key={zone.name} zone={zone} />
-              ))}
+          {zones.length === 0 ? (
+            <div className="border border-white/10 bg-white/5 p-8 text-center">
+              <p className="font-body-md text-on-primary/70">
+                No zone results yet. Go back and search for zones first.
+              </p>
             </div>
-
-            <aside className="mt-8 border-t border-white/10 pt-8 lg:col-span-1 lg:mt-0 lg:border-t-0 lg:pt-0">
-              <div className="lg:sticky lg:top-24">
-                <p className="mb-4 font-label-caps text-label-caps text-on-primary/60">
-                  MARKET OVERVIEW
-                </p>
-                <MarketStats activeJobs={activeJobs} avgSurge={avgSurge} />
-
-                <div className="mt-4 hidden rounded-lg border border-white/10 bg-white/5 p-5 lg:block">
-                  <p className="mb-2 font-label-caps text-label-caps text-on-primary/60">
-                    TIP
-                  </p>
-                  <p className="font-body-md text-sm leading-relaxed text-on-primary/70">
-                    Zones ranked by earning potential based on current demand,
-                    surge pricing, and driver supply in your area.
-                  </p>
-                </div>
+          ) : (
+            <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+              <div className="flex flex-col gap-stack-gap lg:col-span-2 xl:grid xl:grid-cols-2 xl:gap-4">
+                {zones.map((zone) => (
+                  <ZoneCard key={zone.name} zone={zone} />
+                ))}
               </div>
-            </aside>
-          </div>
+
+              <aside className="mt-8 border-t border-white/10 pt-8 lg:col-span-1 lg:mt-0 lg:border-t-0 lg:pt-0">
+                <div className="lg:sticky lg:top-24">
+                  <p className="mb-4 font-label-caps text-label-caps text-on-primary/60">
+                    MARKET OVERVIEW
+                  </p>
+                  <MarketStats
+                    activeJobs={Math.round(activeJobs)}
+                    avgSurge={Math.round(avgSurge * 10) / 10}
+                  />
+
+                  <div className="mt-4 hidden rounded-lg border border-white/10 bg-white/5 p-5 lg:block">
+                    <p className="mb-2 font-label-caps text-label-caps text-on-primary/60">
+                      TIP
+                    </p>
+                    <p className="font-body-md text-sm leading-relaxed text-on-primary/70">
+                      Zones ranked by earning potential based on current demand,
+                      surge pricing, and driver supply in your area.
+                    </p>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          )}
         </div>
       </main>
     </AppShell>

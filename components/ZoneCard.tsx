@@ -56,12 +56,33 @@ export default function ZoneCard({ zone }: ZoneCardProps) {
           </span>
         </div>
       </div>
+
       <div className="mb-3 h-px w-full bg-white/10" />
-      <div className="flex items-start gap-2">
+
+      <div className="mb-4 flex items-start gap-2">
         <MaterialIcon className="text-[18px] text-on-primary/40" icon="auto_awesome" />
-        <p className="font-body-md text-sm leading-snug text-on-primary/70 lg:text-base">
+        <p className="font-body-md text-sm leading-snug text-on-primary/60">
           {zone.reasoning}
         </p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <div className="border border-white/10 bg-white/5 px-3 py-2">
+          <p className="font-label-caps text-[10px] uppercase text-on-primary/50">
+            Surge
+          </p>
+          <p className="font-status-sm text-status-sm font-bold text-on-primary">
+            {zone.surgeMultiplier}x
+          </p>
+        </div>
+        <div className="border border-white/10 bg-white/5 px-3 py-2">
+          <p className="font-label-caps text-[10px] uppercase text-on-primary/50">
+            Active Jobs
+          </p>
+          <p className="font-status-sm text-status-sm font-bold text-on-primary">
+            {zone.activeJobs}
+          </p>
+        </div>
       </div>
     </div>
   );

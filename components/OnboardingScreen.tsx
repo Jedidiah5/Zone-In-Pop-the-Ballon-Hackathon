@@ -1,28 +1,37 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import type { Platform } from "@/types";
 import AppHeader from "./AppHeader";
 import MaterialIcon from "./MaterialIcon";
 import PlatformSelector from "./PlatformSelector";
 import ZoneInLogo from "./ZoneInLogo";
 
-export default function OnboardingScreen() {
-  const router = useRouter();
-  const [platform, setPlatform] = useState<Platform>("uber");
-  const [location, setLocation] = useState("");
+type OnboardingScreenProps = {
+  selectedPlatform: Platform | null;
+  location: string;
+  isLoading: boolean;
+  error: string;
+  onPlatformSelect: (platform: Platform) => void;
+  onLocationChange: (location: string) => void;
+  onSubmit: () => void;
+};
 
+export default function OnboardingScreen({
+  selectedPlatform,
+  location,
+  isLoading,
+  error,
+  onPlatformSelect,
+  onLocationChange,
+  onSubmit,
+}: OnboardingScreenProps) {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       <section className="relative hidden overflow-hidden bg-primary lg:flex lg:w-[45%] lg:flex-col lg:justify-between xl:w-1/2">
         <div className="absolute inset-0 opacity-10">
           <div className="grid h-full w-full grid-cols-6 gap-4 p-8">
             {Array.from({ length: 24 }).map((_, i) => (
-              <div
-                key={i}
-                className="border border-on-primary/20"
-              />
+              <div key={i} className="border border-on-primary/20" />
             ))}
           </div>
         </div>
@@ -106,7 +115,10 @@ export default function OnboardingScreen() {
                 </p>
               </div>
 
-              <PlatformSelector onSelect={setPlatform} selected={platform} />
+              <PlatformSelector
+                onSelect={onPlatformSelect}
+                selected={selectedPlatform}
+              />
 
               <div className="space-y-stack-gap">
                 <label
@@ -123,7 +135,7 @@ export default function OnboardingScreen() {
                   <input
                     className="h-[56px] w-full border border-outline-variant bg-surface-container-lowest pl-10 pr-4 font-body-md outline-none transition-all focus:border-primary focus:ring-0 lg:h-12"
                     id="location"
-                    onChange={(e) => setLocation(e.target.value)}
+                    onChange={(e) => onLocationChange(e.target.value)}
                     placeholder="e.g. Shoreditch High St"
                     type="text"
                     value={location}
@@ -133,13 +145,26 @@ export default function OnboardingScreen() {
 
               <div className="pt-unit">
                 <button
-                  className="flex h-[56px] w-full items-center justify-center gap-2 bg-primary font-label-caps text-label-caps uppercase tracking-widest text-on-primary transition-all hover:bg-primary-container active:scale-[0.98] lg:h-12"
-                  onClick={() => router.push("/zones")}
+                  className="flex h-[56px] w-full items-center justify-center gap-2 bg-primary font-label-caps text-label-caps uppercase tracking-widest text-on-primary transition-all hover:bg-primary-container active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 lg:h-12"
+                  disabled={isLoading}
+                  onClick={onSubmit}
                   type="button"
                 >
-                  Find My Zone
-                  <MaterialIcon icon="arrow_forward" />
+                  {isLoading ? (
+                    <>
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-on-primary border-t-transparent" />
+                      Finding zones...
+                    </>
+                  ) : (
+                    <>
+                      Find My Zone
+                      <MaterialIcon icon="arrow_forward" />
+                    </>
+                  )}
                 </button>
+                {error && (
+                  <p className="mt-2 text-center text-sm text-red-600">{error}</p>
+                )}
               </div>
             </div>
 
