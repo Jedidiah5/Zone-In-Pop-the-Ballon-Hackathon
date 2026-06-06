@@ -34,7 +34,7 @@ export default function BottomSheet({
         {header}
         <ChevronUp
           aria-hidden="true"
-          className={`text-[#888888] transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+          className={`text-[#666666] transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
           size={18}
         />
       </button>

@@ -101,11 +101,11 @@ export default function ProfilePage() {
               {fullName ? `Hey, ${fullName}` : "My profile"}
             </h1>
             {email && (
-              <p className="mt-1 text-sm text-[#888888]">{email}</p>
+              <p className="mt-1 text-sm text-[#666666]">{email}</p>
             )}
           </div>
           <button
-            className="shrink-0 rounded-md border border-[#2A2A2A] bg-[#1E1E1E] px-4 py-2 text-sm font-bold text-[#F5A623] active:opacity-80"
+            className="shrink-0 rounded-md border border-[#E5E5E5] bg-white px-4 py-2 text-sm font-bold text-black active:opacity-80"
             onClick={() => router.push("/onboarding")}
             type="button"
           >
@@ -118,7 +118,7 @@ export default function ProfilePage() {
             <section className="grid grid-cols-2 gap-4 lg:col-span-2">
               {vehicleType && (
                 <div className="bolt-card p-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
                     Vehicle
                   </p>
                   <p className="mt-1 text-lg font-bold">
@@ -128,10 +128,10 @@ export default function ProfilePage() {
               )}
               {shiftPreference && (
                 <div className="bolt-card p-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
                     Shift
                   </p>
-                  <p className="mt-1 text-sm font-bold text-[#F5A623]">
+                  <p className="mt-1 text-sm font-bold text-black">
                     {SHIFT_LABELS[shiftPreference]}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default function ProfilePage() {
           )}
 
           <section className="bolt-card p-5">
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
               Platform
             </p>
             <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ export default function ProfilePage() {
 
           <section className="bolt-card p-5">
             <label
-              className="mb-3 block text-xs font-bold uppercase tracking-[0.12em] text-[#888888]"
+              className="mb-3 block text-xs font-bold uppercase tracking-[0.12em] text-[#666666]"
               htmlFor="home-area"
             >
               Home area
@@ -169,44 +169,44 @@ export default function ProfilePage() {
           </section>
 
           <section className="bolt-card p-5 lg:col-span-2">
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
               Top zones from last search
             </p>
             <div className="no-scrollbar flex flex-wrap gap-2">
               {preferredZones.length ? (
                 preferredZones.map((zone) => (
                   <span
-                    className="rounded-full border border-[#F5A623]/40 bg-[#F5A623]/10 px-4 py-2 text-sm font-bold text-[#F5A623]"
+                    className="rounded-full border border-black/40 bg-black/10 px-4 py-2 text-sm font-bold text-black"
                     key={zone}
                   >
                     {zone}
                   </span>
                 ))
               ) : (
-                <span className="text-sm font-bold text-[#888888]">
+                <span className="text-sm font-bold text-[#666666]">
                   Run a search to see your zones
                 </span>
               )}
             </div>
           </section>
 
-          <section className="bolt-card border-[#F5A623]/30 p-5 lg:col-span-2">
+          <section className="bolt-card border-black/30 p-5 lg:col-span-2">
             <div className="mb-3 flex items-center justify-between gap-4">
-              <h2 className="text-xl font-bold tracking-[-0.05em] text-[#F5A623]">
+              <h2 className="text-xl font-bold tracking-[-0.05em] text-black">
                 ZoneIn Pro
               </h2>
-              <span className="rounded-full border border-[#00FF94]/40 bg-[#00FF94]/10 px-3 py-1 text-xs font-bold text-[#00FF94]">
+              <span className="rounded-full border border-black bg-black px-3 py-1 text-xs font-bold text-white">
                 Active
               </span>
             </div>
-            <p className="text-sm font-bold text-[#888888]">
+            <p className="text-sm font-bold text-[#666666]">
               £2.99/month · cancel anytime
             </p>
           </section>
         </div>
 
         <button
-          className="mt-6 w-full py-3 text-center text-sm font-bold text-[#888888] active:text-white disabled:opacity-60"
+          className="mt-6 w-full py-3 text-center text-sm font-bold text-[#666666] active:text-black disabled:opacity-60"
           disabled={isSigningOut}
           onClick={handleSignOut}
           type="button"

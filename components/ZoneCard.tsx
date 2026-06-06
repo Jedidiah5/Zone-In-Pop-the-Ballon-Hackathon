@@ -27,17 +27,17 @@ function getPotentialBadge(potential: Zone["potential"]) {
     case "high":
       return {
         label: "HIGH",
-        className: "bg-[#00FF94]/15 text-[#00FF94] border border-[#00FF94]/40",
+        className: "bg-black text-white border border-black",
       };
     case "medium":
       return {
         label: "MEDIUM",
-        className: "bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/40",
+        className: "bg-[#F0F0F0] text-black border border-[#CCCCCC]",
       };
     case "low":
       return {
         label: "LOW",
-        className: "bg-[#FF3B30]/10 text-[#FF3B30] border border-[#FF3B30]/40",
+        className: "bg-white text-[#666666] border border-[#E5E5E5]",
       };
   }
 }
@@ -56,7 +56,7 @@ export default function ZoneCard({
     return (
       <Link
         className={`bolt-card flex touch-manipulation items-center gap-3 p-4 transition-colors active:opacity-90 ${
-          selected ? "border-[#F5A623] bg-[#F5A623]/8" : ""
+          selected ? "border-black bg-black/8" : ""
         }`}
         href={href}
         id={id ?? `zone-card-${getZoneSlug(zone.name)}`}
@@ -64,7 +64,7 @@ export default function ZoneCard({
       >
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h3 className="truncate text-base font-bold text-white">
+            <h3 className="truncate text-base font-bold text-black">
               {zone.name}
             </h3>
             <span
@@ -73,16 +73,16 @@ export default function ZoneCard({
               {badge.label}
             </span>
           </div>
-          <p className="mt-1 text-xs font-medium text-[#888888]">
+          <p className="mt-1 text-xs font-medium text-[#666666]">
             {formatDistance(zone.distance)} · {zone.surgeMultiplier}x surge ·{" "}
             {zone.activeJobs} jobs
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
-          <span className="text-lg font-bold text-[#F5A623]">
+          <span className="text-lg font-bold text-black">
             {zone.surgeMultiplier}x
           </span>
-          <ChevronRight aria-hidden="true" className="text-[#555555]" size={18} />
+          <ChevronRight aria-hidden="true" className="text-[#999999]" size={18} />
         </div>
       </Link>
     );
@@ -94,7 +94,7 @@ export default function ZoneCard({
       id={id ?? `zone-card-${getZoneSlug(zone.name)}`}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-xl font-bold leading-tight text-white">
+        <h3 className="text-xl font-bold leading-tight text-black">
           {zone.name}
         </h3>
         <span
@@ -104,26 +104,26 @@ export default function ZoneCard({
         </span>
       </div>
 
-      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#555555]">
+      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#999999]">
         {formatDistance(zone.distance)}
       </p>
 
-      <p className="text-sm leading-relaxed text-[#888888]">{zone.reasoning}</p>
+      <p className="text-sm leading-relaxed text-[#666666]">{zone.reasoning}</p>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-md border border-[#2A2A2A] bg-[#0A0A0A] p-3">
-          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
+        <div className="rounded-md border border-[#E5E5E5] bg-white p-3">
+          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#999999]">
             Surge
           </p>
-          <p className="text-2xl font-bold text-[#F5A623]">
+          <p className="text-2xl font-bold text-black">
             {zone.surgeMultiplier}x
           </p>
         </div>
-        <div className="rounded-md border border-[#2A2A2A] bg-[#0A0A0A] p-3">
-          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
+        <div className="rounded-md border border-[#E5E5E5] bg-white p-3">
+          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#999999]">
             Jobs
           </p>
-          <p className="text-2xl font-bold text-[#00FF94]">{zone.activeJobs}</p>
+          <p className="text-2xl font-bold text-black">{zone.activeJobs}</p>
         </div>
       </div>
 

@@ -33,19 +33,19 @@ export default function BottomNav() {
             >
               <span
                 className={`flex h-9 w-9 items-center justify-center rounded-md transition-colors ${
-                  isActive ? "bg-[#F5A623]/15" : ""
+                  isActive ? "bg-black/15" : ""
                 }`}
               >
                 <Icon
                   aria-hidden="true"
-                  className={isActive ? "text-[#F5A623]" : "text-[#888888]"}
+                  className={isActive ? "text-black" : "text-[#666666]"}
                   size={22}
                   strokeWidth={2.5}
                 />
               </span>
               <span
                 className={`text-[10px] font-bold ${
-                  isActive ? "text-[#F5A623]" : "text-[#888888]"
+                  isActive ? "text-black" : "text-[#666666]"
                 }`}
               >
                 {item.label}

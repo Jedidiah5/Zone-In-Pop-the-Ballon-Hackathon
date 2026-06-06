@@ -5,6 +5,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { getZoneCoordinates } from "@/lib/zoneCoordinates";
 import type { Zone } from "@/types";
 
+const LIGHT_MAP_STYLE =
+  "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
+
 type ZonesMapProps = {
   zones: Zone[];
   className?: string;
@@ -33,7 +36,7 @@ export default function ZonesMap({
           zoom: 10.5,
         }}
         keyboard={false}
-        mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+        mapStyle={LIGHT_MAP_STYLE}
         scrollZoom={interactive}
         style={{ width: "100%", height: "100%" }}
         touchZoomRotate={interactive}
@@ -63,7 +66,7 @@ export default function ZonesMap({
                   <div
                     className={`pulse-marker ${isSelected ? "selected-marker" : ""}`}
                   />
-                  <span className="mt-1 whitespace-nowrap rounded-full bg-[#0A0A0A]/80 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-sm">
+                  <span className="mt-1 whitespace-nowrap rounded-md border border-[#E5E5E5] bg-white px-2 py-0.5 text-[10px] font-bold text-black shadow-sm">
                     {zone.name}
                   </span>
                 </button>
@@ -87,7 +90,7 @@ export default function ZonesMap({
                   <div
                     className={`medium-marker ${isSelected ? "selected-marker" : ""}`}
                   />
-                  <span className="mt-1 whitespace-nowrap rounded-full bg-[#0A0A0A]/80 px-2 py-0.5 text-[10px] font-bold text-[#F5A623] backdrop-blur-sm">
+                  <span className="mt-1 whitespace-nowrap rounded-md border border-[#E5E5E5] bg-white px-2 py-0.5 text-[10px] font-bold text-[#666666] shadow-sm">
                     {zone.name}
                   </span>
                 </button>
@@ -108,7 +111,7 @@ export default function ZonesMap({
                 type="button"
               >
                 <div
-                  className={`rounded-full bg-[#444444] ${isSelected ? "selected-marker" : ""}`}
+                  className={`rounded-full bg-[#CCCCCC] ${isSelected ? "selected-marker" : ""}`}
                   style={{ height: 10, width: 10 }}
                 />
               </button>

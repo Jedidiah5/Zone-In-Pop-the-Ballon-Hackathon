@@ -88,7 +88,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   };
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] text-white lg:grid lg:grid-cols-2">
+    <main className="min-h-dvh bg-white text-black lg:grid lg:grid-cols-2">
       <div className="bolt-hero-curve relative hidden h-full min-h-dvh overflow-hidden lg:block">
         <Image
           alt=""
@@ -98,16 +98,16 @@ export default function AuthForm({ mode }: AuthFormProps) {
           src={APP_IMAGES.heroMap}
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A]/60 to-[#1A1A1A]/90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-[#F7F7F7]/90" />
         <div className="relative z-10 flex h-full flex-col justify-between p-10">
           <p className="text-3xl font-bold tracking-[-0.04em]">
-            ZoneIn<span className="text-[#F5A623]">.</span>
+            ZoneIn<span className="text-black font-bold">.</span>
           </p>
           <div>
             <h2 className="text-4xl font-bold tracking-[-0.06em]">
               Drive smarter across London.
             </h2>
-            <p className="mt-3 max-w-md text-lg text-[#888888]">
+            <p className="mt-3 max-w-md text-lg text-[#666666]">
               Live zone demand, surge intel, and one-tap navigation for gig
               drivers.
             </p>
@@ -125,20 +125,20 @@ export default function AuthForm({ mode }: AuthFormProps) {
             src={APP_IMAGES.heroMap}
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1A1A1A]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F7F7F7]" />
           <div className="relative z-10 flex h-full items-center justify-center">
             <p className="text-3xl font-bold tracking-[-0.04em]">
-              ZoneIn<span className="text-[#F5A623]">.</span>
+              ZoneIn<span className="text-black font-bold">.</span>
             </p>
           </div>
         </div>
 
-        <div className="relative -mt-8 flex flex-1 flex-col rounded-t-lg bg-[#1A1A1A] px-6 pb-8 pt-8 lg:mt-0 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
+        <div className="relative -mt-8 flex flex-1 flex-col rounded-t-lg bg-[#F7F7F7] px-6 pb-8 pt-8 lg:mt-0 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
           <div className="mx-auto w-full max-w-md">
             <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
               {isSignup ? "Create account" : "Welcome back"}
             </h1>
-            <p className="mt-2 text-sm leading-6 text-[#888888]">
+            <p className="mt-2 text-sm leading-6 text-[#666666]">
               {isSignup
                 ? "Sign up to save your zones and profile across devices."
                 : "Sign in with the email and password you used to sign up."}
@@ -147,7 +147,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
               <div>
                 <label
-                  className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-[#555555]"
+                  className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-[#999999]"
                   htmlFor="email"
                 >
                   Email
@@ -166,7 +166,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               <div>
                 <label
-                  className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-[#555555]"
+                  className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-[#999999]"
                   htmlFor="password"
                 >
                   Password
@@ -186,7 +186,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               {error && (
                 <p
-                  className="rounded-md border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
+                  className="rounded-md border border-[#E5E5E5] bg-[#F5F5F5] px-4 py-3 text-sm font-bold text-black"
                   role="alert"
                 >
                   {error}
@@ -195,7 +195,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               {message && (
                 <p
-                  className="rounded-md border border-[#00FF94]/40 bg-[#00FF94]/10 px-4 py-3 text-sm font-bold text-[#00FF94]"
+                  className="rounded-md border border-black bg-[#F5F5F5] px-4 py-3 text-sm font-bold text-black"
                   role="status"
                 >
                   {message}
@@ -217,10 +217,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm font-bold text-[#888888]">
+            <p className="mt-6 text-center text-sm font-bold text-[#666666]">
               {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
               <Link
-                className="text-[#F5A623] active:opacity-80"
+                className="text-black active:opacity-80"
                 href={isSignup ? "/login" : "/signup"}
               >
                 {isSignup ? "Sign in" : "Create account"}

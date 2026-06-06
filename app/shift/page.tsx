@@ -55,7 +55,7 @@ export default function ShiftPage() {
 
   if (!isReady) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold text-[#888888]">
+      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
         Loading shift...
       </main>
     );
@@ -71,7 +71,7 @@ export default function ShiftPage() {
         <div className="grid gap-5 lg:grid-cols-[1fr_380px]">
           <section className="grid grid-cols-2 gap-4">
             <div className="bolt-card p-5">
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
                 Online
               </p>
               <p className="text-3xl font-bold tracking-[-0.06em] lg:text-4xl">
@@ -79,10 +79,10 @@ export default function ShiftPage() {
               </p>
             </div>
             <div className="bolt-card p-5">
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
                 Current zone
               </p>
-              <p className="text-2xl font-bold tracking-[-0.06em] text-[#F5A623] lg:text-3xl">
+              <p className="text-2xl font-bold tracking-[-0.06em] text-black lg:text-3xl">
                 {activeZone}
               </p>
             </div>
@@ -90,19 +90,19 @@ export default function ShiftPage() {
 
           <section className="bolt-card p-5 lg:row-span-2">
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#00FF94]" />
+              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-black" />
               <h2 className="text-xl font-bold tracking-[-0.04em]">Shift log</h2>
             </div>
             <div className="space-y-4">
               {shiftEvents.map((event) => (
                 <div
-                  className="flex gap-4 border-b border-[#2A2A2A] pb-4 last:border-b-0 last:pb-0"
+                  className="flex gap-4 border-b border-[#E5E5E5] pb-4 last:border-b-0 last:pb-0"
                   key={`${event.time}-${event.label}`}
                 >
-                  <span className="shrink-0 font-bold text-[#F5A623]">
+                  <span className="shrink-0 font-bold text-black">
                     {event.time}
                   </span>
-                  <span className="font-medium text-[#888888]">{event.label}</span>
+                  <span className="font-medium text-[#666666]">{event.label}</span>
                 </div>
               ))}
             </div>

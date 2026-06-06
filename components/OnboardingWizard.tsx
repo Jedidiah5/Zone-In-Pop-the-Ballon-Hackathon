@@ -137,8 +137,8 @@ export default function OnboardingWizard({
   };
 
   return (
-    <main className="min-h-dvh bg-[#0A0A0A] text-white lg:flex lg:items-center lg:justify-center lg:px-8 lg:py-10">
-      <div className="mx-auto flex w-full max-w-lg flex-col lg:max-w-5xl lg:flex-row lg:overflow-hidden lg:rounded-lg lg:border lg:border-[#2A2A2A]">
+    <main className="min-h-dvh bg-white text-black lg:flex lg:items-center lg:justify-center lg:px-8 lg:py-10">
+      <div className="mx-auto flex w-full max-w-lg flex-col lg:max-w-5xl lg:flex-row lg:overflow-hidden lg:rounded-lg lg:border lg:border-[#E5E5E5]">
         <div className="bolt-hero-curve relative h-[38dvh] shrink-0 overflow-hidden lg:h-auto lg:min-h-[560px] lg:w-[42%] lg:rounded-none">
           <Image
             alt=""
@@ -148,23 +148,23 @@ export default function OnboardingWizard({
             src={STEP_IMAGES[step]}
             unoptimized={step > 1}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1A1A1A] lg:bg-gradient-to-r lg:from-transparent lg:to-[#1A1A1A]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F7F7F7] lg:bg-gradient-to-r lg:from-transparent lg:to-[#F7F7F7]/80" />
           <div className="absolute left-6 top-safe pt-4 text-xl font-bold tracking-[-0.04em] lg:left-8 lg:text-2xl">
-            ZoneIn<span className="text-[#F5A623]">.</span>
+            ZoneIn<span className="text-black font-bold">.</span>
           </div>
         </div>
 
-        <div className="relative -mt-6 flex flex-1 flex-col rounded-t-lg bg-[#1A1A1A] px-6 pb-8 pt-6 lg:mt-0 lg:rounded-none lg:px-8 lg:py-8">
+        <div className="relative -mt-6 flex flex-1 flex-col rounded-t-lg bg-[#F7F7F7] px-6 pb-8 pt-6 lg:mt-0 lg:rounded-none lg:px-8 lg:py-8">
           <div className="mb-5">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#999999]">
                 Step {step + 1} of {STEP_LABELS.length}
               </p>
-              <p className="text-xs font-bold text-[#F5A623]">{STEP_LABELS[step]}</p>
+              <p className="text-xs font-bold text-black">{STEP_LABELS[step]}</p>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-[#2A2A2A]">
+            <div className="h-1.5 overflow-hidden rounded-full bg-[#E5E5E5]">
               <div
-                className="h-full rounded-full bg-[#F5A623] transition-all duration-300"
+                className="h-full rounded-full bg-black transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -176,12 +176,12 @@ export default function OnboardingWizard({
                 <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
                   Hey driver 👋
                 </h1>
-                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                <p className="mt-2 text-sm leading-6 text-[#666666]">
                   Let&apos;s set up your profile so ZoneIn can find the best
                   earning zones for you.
                 </p>
                 <label
-                  className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.12em] text-[#555555]"
+                  className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.12em] text-[#999999]"
                   htmlFor="full-name"
                 >
                   Your name
@@ -189,7 +189,7 @@ export default function OnboardingWizard({
                 <div className="relative">
                   <User
                     aria-hidden="true"
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623]"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-black"
                     size={20}
                   />
                   <input
@@ -209,7 +209,7 @@ export default function OnboardingWizard({
                 <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
                   Your platform
                 </h1>
-                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                <p className="mt-2 text-sm leading-6 text-[#666666]">
                   Which app do you earn on? We&apos;ll tailor zone intel to your
                   platform.
                 </p>
@@ -224,11 +224,11 @@ export default function OnboardingWizard({
                 <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
                   Where are you?
                 </h1>
-                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                <p className="mt-2 text-sm leading-6 text-[#666666]">
                   Your current area helps us find nearby high-demand zones.
                 </p>
                 <label
-                  className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.12em] text-[#555555]"
+                  className="mb-2 mt-5 block text-xs font-bold uppercase tracking-[0.12em] text-[#999999]"
                   htmlFor="location"
                 >
                   Current area
@@ -236,7 +236,7 @@ export default function OnboardingWizard({
                 <div className="relative mb-4">
                   <MapPin
                     aria-hidden="true"
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623]"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-black"
                     size={20}
                   />
                   <input
@@ -255,7 +255,7 @@ export default function OnboardingWizard({
                 >
                   <LocateFixed
                     aria-hidden="true"
-                    className={isLocating ? "animate-pulse text-[#F5A623]" : "text-[#F5A623]"}
+                    className={isLocating ? "animate-pulse text-black" : "text-black"}
                     size={18}
                   />
                   {isLocating ? "Locating..." : "Use my current location"}
@@ -268,12 +268,12 @@ export default function OnboardingWizard({
                 <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
                   Your setup
                 </h1>
-                <p className="mt-2 text-sm leading-6 text-[#888888]">
+                <p className="mt-2 text-sm leading-6 text-[#666666]">
                   Vehicle and shift info helps us rank zones that suit how you
                   drive.
                 </p>
 
-                <p className="mb-3 mt-5 text-xs font-bold uppercase tracking-[0.12em] text-[#555555]">
+                <p className="mb-3 mt-5 text-xs font-bold uppercase tracking-[0.12em] text-[#999999]">
                   Vehicle type
                 </p>
                 <div className="mb-6 grid grid-cols-2 gap-3">
@@ -282,8 +282,8 @@ export default function OnboardingWizard({
                       key={vehicle.id}
                       className={`flex h-20 touch-manipulation flex-col items-center justify-center gap-1 rounded-md border text-sm font-bold active:opacity-80 ${
                         vehicleType === vehicle.id
-                          ? "border-[#F5A623] bg-[#F5A623]/12 text-white"
-                          : "border-[#2A2A2A] bg-[#1E1E1E] text-[#888888]"
+                          ? "border-black bg-black/12 text-black"
+                          : "border-[#E5E5E5] bg-white text-[#666666]"
                       }`}
                       onClick={() => setVehicleType(vehicle.id)}
                       type="button"
@@ -294,7 +294,7 @@ export default function OnboardingWizard({
                   ))}
                 </div>
 
-                <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#555555]">
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#999999]">
                   Usual shift
                 </p>
                 <div className="space-y-2">
@@ -303,14 +303,14 @@ export default function OnboardingWizard({
                       key={shift.id}
                       className={`flex w-full touch-manipulation items-center justify-between rounded-md border px-4 py-3.5 text-left active:opacity-80 ${
                         shiftPreference === shift.id
-                          ? "border-[#F5A623] bg-[#F5A623]/12"
-                          : "border-[#2A2A2A] bg-[#1E1E1E]"
+                          ? "border-black bg-black/12"
+                          : "border-[#E5E5E5] bg-white"
                       }`}
                       onClick={() => setShiftPreference(shift.id)}
                       type="button"
                     >
                       <span className="font-bold">{shift.label}</span>
-                      <span className="text-xs text-[#888888]">{shift.time}</span>
+                      <span className="text-xs text-[#666666]">{shift.time}</span>
                     </button>
                   ))}
                 </div>
@@ -320,7 +320,7 @@ export default function OnboardingWizard({
 
           {(stepError || error) && (
             <p
-              className="mb-4 rounded-md border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
+              className="mb-4 rounded-md border border-[#E5E5E5] bg-[#F5F5F5] px-4 py-3 text-sm font-bold text-black"
               role="alert"
             >
               {stepError || error}

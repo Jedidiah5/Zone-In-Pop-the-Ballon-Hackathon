@@ -13,7 +13,7 @@ import { loadLocation } from "@/lib/storage";
 const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full items-center justify-center text-sm font-bold text-[#888888]">
+    <div className="flex h-full items-center justify-center text-sm font-bold text-[#666666]">
       Loading London map...
     </div>
   ),
@@ -69,27 +69,27 @@ export default function ZonesPage() {
     <div className="w-full text-left">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold tracking-[-0.04em] text-white">
+          <h1 className="text-xl font-bold tracking-[-0.04em] text-black">
             Top zones now
           </h1>
           {driverArea && (
-            <p className="mt-0.5 text-xs font-medium text-[#888888]">
+            <p className="mt-0.5 text-xs font-medium text-[#666666]">
               Near {driverArea}
             </p>
           )}
         </div>
         <Link
-          className="shrink-0 rounded-md border border-[#2A2A2A] bg-[#1E1E1E] px-3 py-2 text-xs font-bold text-[#F5A623] active:opacity-80"
+          className="shrink-0 rounded-md border border-[#E5E5E5] bg-white px-3 py-2 text-xs font-bold text-black active:opacity-80"
           href="/onboarding"
         >
           New search
         </Link>
       </div>
       <div className="mt-3 flex gap-2 overflow-x-auto no-scrollbar">
-        <span className="bolt-float-chip shrink-0 px-3 py-1.5 text-xs font-bold text-[#F5A623]">
+        <span className="bolt-float-chip shrink-0 px-3 py-1.5 text-xs font-bold text-black">
           Avg surge {avgSurge.toFixed(1)}x
         </span>
-        <span className="bolt-float-chip shrink-0 px-3 py-1.5 text-xs font-bold text-[#00FF94]">
+        <span className="bolt-float-chip shrink-0 px-3 py-1.5 text-xs font-bold text-black">
           {Math.round(activeJobs / 10) * 10}+ active jobs
         </span>
       </div>
@@ -98,7 +98,7 @@ export default function ZonesPage() {
 
   if (!isReady || !hasSearch) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold text-[#888888]">
+      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
         Loading zones...
       </main>
     );
@@ -118,13 +118,13 @@ export default function ZonesPage() {
         </div>
 
         <div className="absolute left-4 top-safe z-20 pt-3">
-          <div className="bolt-float-chip flex items-center gap-2 px-3 py-2 text-xs font-bold text-[#FF3B30]">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-[#FF3B30]" />
+          <div className="bolt-float-chip flex items-center gap-2 px-3 py-2 text-xs font-bold text-black">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-black" />
             LIVE
           </div>
         </div>
         <div className="absolute right-4 top-safe z-20 pt-3">
-          <div className="bolt-float-chip px-3 py-2 text-sm font-bold text-white">
+          <div className="bolt-float-chip px-3 py-2 text-sm font-bold text-black">
             {currentTime}
           </div>
         </div>
@@ -154,39 +154,39 @@ export default function ZonesPage() {
             zones={zones}
           />
           <div className="absolute left-6 top-6 flex items-center gap-3">
-            <div className="bolt-float-chip flex items-center gap-2 px-4 py-2 text-xs font-bold text-[#FF3B30]">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-[#FF3B30]" />
+            <div className="bolt-float-chip flex items-center gap-2 px-4 py-2 text-xs font-bold text-black">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-black" />
               LIVE
             </div>
-            <div className="bolt-float-chip px-4 py-2 text-sm font-bold text-white">
+            <div className="bolt-float-chip px-4 py-2 text-sm font-bold text-black">
               {currentTime}
             </div>
           </div>
         </div>
 
-        <aside className="flex min-h-dvh flex-col border-l border-[#2A2A2A] bg-[#111111]">
-          <div className="border-b border-[#2A2A2A] p-6">
+        <aside className="flex min-h-dvh flex-col border-l border-[#E5E5E5] bg-[#F7F7F7]">
+          <div className="border-b border-[#E5E5E5] p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold tracking-[-0.04em] text-white">
+                <h1 className="text-2xl font-bold tracking-[-0.04em] text-black">
                   Top zones now
                 </h1>
                 {driverArea && (
-                  <p className="mt-1 text-sm text-[#888888]">Near {driverArea}</p>
+                  <p className="mt-1 text-sm text-[#666666]">Near {driverArea}</p>
                 )}
               </div>
               <Link
-                className="shrink-0 rounded-md border border-[#2A2A2A] bg-[#1E1E1E] px-4 py-2 text-sm font-bold text-[#F5A623] hover:opacity-90"
+                className="shrink-0 rounded-md border border-[#E5E5E5] bg-white px-4 py-2 text-sm font-bold text-black hover:opacity-90"
                 href="/onboarding"
               >
                 New search
               </Link>
             </div>
             <div className="mt-4 flex gap-2">
-              <span className="rounded-full border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-2 text-sm font-bold text-[#F5A623]">
+              <span className="rounded-full border border-[#E5E5E5] bg-[#F7F7F7] px-4 py-2 text-sm font-bold text-black">
                 Avg surge {avgSurge.toFixed(1)}x
               </span>
-              <span className="rounded-full border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-2 text-sm font-bold text-[#00FF94]">
+              <span className="rounded-full border border-[#E5E5E5] bg-[#F7F7F7] px-4 py-2 text-sm font-bold text-black">
                 {Math.round(activeJobs / 10) * 10}+ jobs
               </span>
             </div>

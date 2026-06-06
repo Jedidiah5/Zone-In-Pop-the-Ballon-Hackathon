@@ -30,8 +30,8 @@ export default function PlatformSelector({
             aria-pressed={isSelected}
             className={`relative z-10 flex min-h-[88px] touch-manipulation cursor-pointer select-none flex-col justify-between rounded-md border p-4 text-left transition-colors active:opacity-80 ${
               isSelected
-                ? "border-[#F5A623] bg-[#F5A623]/12 ring-1 ring-[#F5A623]/50"
-                : "border-[#2A2A2A] bg-[#1E1E1E]"
+                ? "border-black bg-black/12 ring-1 ring-black/50"
+                : "border-[#E5E5E5] bg-white"
             }`}
             onClick={() => onSelect(platform.id)}
             type="button"
@@ -39,7 +39,7 @@ export default function PlatformSelector({
             <span className="pointer-events-none">
               <PlatformIcon platform={platform.id} size={36} />
             </span>
-            <span className="pointer-events-none text-lg font-bold text-white">
+            <span className="pointer-events-none text-lg font-bold text-black">
               {platform.label}
             </span>
           </button>

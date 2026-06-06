@@ -38,7 +38,7 @@ export default function EarningsPage() {
 
   if (!isReady) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold text-[#888888]">
+      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
         Loading earnings...
       </main>
     );
@@ -53,24 +53,24 @@ export default function EarningsPage() {
 
         <section className="mb-6 grid gap-4 md:grid-cols-3">
           <div className="bolt-card p-5">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
               Time online
             </p>
             <p className="text-3xl font-bold tracking-[-0.06em]">2h 34m</p>
           </div>
           <div className="bolt-card p-5">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
               Est. earnings
             </p>
-            <p className="text-3xl font-bold tracking-[-0.06em] text-[#F5A623]">
+            <p className="text-3xl font-bold tracking-[-0.06em] text-black">
               £{totalEarnings.toFixed(2)}
             </p>
           </div>
           <div className="bolt-card p-5">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#888888]">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[#666666]">
               Best zone
             </p>
-            <p className="text-3xl font-bold tracking-[-0.06em] text-[#00FF94]">
+            <p className="text-3xl font-bold tracking-[-0.06em] text-black">
               {bestZone}
             </p>
           </div>
@@ -84,39 +84,39 @@ export default function EarningsPage() {
             {isMounted ? (
               <ResponsiveContainer height="100%" width="100%">
                 <BarChart data={earningsData}>
-                  <CartesianGrid stroke="#2A2A2A" vertical={false} />
+                  <CartesianGrid stroke="#E5E5E5" vertical={false} />
                   <XAxis
                     axisLine={false}
                     dataKey="zone"
-                    tick={{ fill: "#888888", fontSize: 11, fontWeight: 700 }}
+                    tick={{ fill: "#666666", fontSize: 11, fontWeight: 700 }}
                     tickLine={false}
                   />
                   <YAxis
                     axisLine={false}
-                    tick={{ fill: "#888888", fontSize: 11, fontWeight: 700 }}
+                    tick={{ fill: "#666666", fontSize: 11, fontWeight: 700 }}
                     tickFormatter={(value) => `£${value}`}
                     tickLine={false}
                   />
                   <Tooltip
                     contentStyle={{
-                      background: "#1A1A1A",
-                      border: "1px solid #2A2A2A",
-                      borderRadius: 14,
-                      color: "#FFFFFF",
+                      background: "#FFFFFF",
+                      border: "1px solid #E5E5E5",
+                      borderRadius: 6,
+                      color: "#000000",
                       fontWeight: 700,
                     }}
-                    cursor={{ fill: "#F5A623", opacity: 0.08 }}
+                    cursor={{ fill: "#000000", opacity: 0.06 }}
                     formatter={(value) => [`£${value}`, "Earned"]}
                   />
                   <Bar
                     dataKey="earnings"
-                    fill="#F5A623"
+                    fill="#000000"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full rounded-md border border-[#2A2A2A] bg-[#0A0A0A]" />
+              <div className="h-full rounded-md border border-[#E5E5E5] bg-white" />
             )}
           </div>
         </section>

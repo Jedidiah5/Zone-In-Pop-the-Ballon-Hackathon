@@ -15,7 +15,7 @@ export default function AppLayout({
   hideNav = false,
 }: AppLayoutProps) {
   return (
-    <div className="min-h-dvh bg-[#0A0A0A]">
+    <div className="min-h-dvh bg-white">
       <SidebarNav />
       <div
         className={`lg:ml-[280px] ${fullBleed ? "min-h-dvh" : "pb-24 pt-safe lg:pb-8 lg:pt-0"}`}
