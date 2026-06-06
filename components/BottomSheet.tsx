@@ -10,6 +10,8 @@ type BottomSheetProps = {
   className?: string;
 };
 
+const NAV_CLEARANCE = "calc(4.25rem + 0.5rem + env(safe-area-inset-bottom, 0px))";
+
 export default function BottomSheet({
   children,
   header,
@@ -20,13 +22,18 @@ export default function BottomSheet({
 
   return (
     <div
-      className={`bolt-sheet fixed bottom-[5.5rem] left-0 right-0 z-30 flex flex-col transition-[height] duration-300 ease-out lg:hidden ${className}`}
-      style={{ height: expanded ? "calc(100dvh - 5.5rem - env(safe-area-inset-bottom))" : peekHeight }}
+      className={`bolt-sheet fixed bottom-0 left-0 right-0 z-30 flex flex-col bg-white transition-[height] duration-300 ease-out lg:hidden ${className}`}
+      style={{
+        height: expanded
+          ? `calc(100dvh - env(safe-area-inset-top, 0px))`
+          : peekHeight,
+        paddingBottom: NAV_CLEARANCE,
+      }}
     >
       <button
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse panel" : "Expand panel"}
-        className="flex w-full shrink-0 touch-manipulation flex-col items-center gap-3 px-5 pb-2 pt-3"
+        className="flex w-full shrink-0 touch-manipulation flex-col items-center gap-3 bg-white px-5 pb-2 pt-3"
         onClick={() => setExpanded((value) => !value)}
         type="button"
       >
@@ -39,7 +46,7 @@ export default function BottomSheet({
         />
       </button>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-4 no-scrollbar">
+      <div className="min-h-0 flex-1 overflow-y-auto bg-white px-5 pb-4 no-scrollbar">
         {children}
       </div>
     </div>

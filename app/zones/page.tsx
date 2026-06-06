@@ -86,10 +86,10 @@ export default function ZonesPage() {
         </Link>
       </div>
       <div className="mt-3 flex gap-2 overflow-x-auto no-scrollbar">
-        <span className="bolt-float-chip shrink-0 px-3 py-1.5 text-xs font-bold text-black">
+        <span className="shrink-0 rounded-md border border-[#E5E5E5] bg-white px-3 py-1.5 text-xs font-bold text-black">
           Avg surge {avgSurge.toFixed(1)}x
         </span>
-        <span className="bolt-float-chip shrink-0 px-3 py-1.5 text-xs font-bold text-black">
+        <span className="shrink-0 rounded-md border border-[#E5E5E5] bg-white px-3 py-1.5 text-xs font-bold text-black">
           {Math.round(activeJobs / 10) * 10}+ active jobs
         </span>
       </div>
