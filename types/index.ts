@@ -18,3 +18,11 @@ export type DriverProfile = {
   location: string;
   preferredZones: string[];
 };
+
+export type UserProfile = {
+  id: string;
+  email: string | null;
+  platform: Platform | null;
+  home_area: string | null;
+  active_zone: string | null;
+};

@@ -10,6 +10,14 @@ const KEYS = {
   activeZone: "zonein_active_zone",
 } as const;
 
+type SearchCache = {
+  zones: Zone[];
+  platform: Platform;
+  location: string;
+  source: string;
+  sourceReason?: string;
+};
+
 export function loadZones(): Zone[] {
   if (typeof window === "undefined") {
     return MOCK_ZONES;
@@ -25,6 +33,24 @@ export function loadZones(): Zone[] {
     return parsed.length ? parsed : MOCK_ZONES;
   } catch {
     return MOCK_ZONES;
+  }
+}
+
+export function cacheSearchLocally({
+  zones,
+  platform,
+  location,
+  source,
+  sourceReason,
+}: SearchCache) {
+  localStorage.setItem(KEYS.results, JSON.stringify(zones));
+  localStorage.setItem(KEYS.platform, platform);
+  localStorage.setItem(KEYS.location, location);
+  localStorage.setItem(KEYS.source, source);
+  if (sourceReason) {
+    localStorage.setItem(KEYS.sourceReason, sourceReason);
+  } else {
+    localStorage.removeItem(KEYS.sourceReason);
   }
 }
 
@@ -70,8 +96,12 @@ export function loadPreferredZones(): string[] {
   return zones.slice(0, 5).map((zone) => zone.name);
 }
 
-export function clearSession() {
+export function clearLocalSession() {
   Object.values(KEYS).forEach((key) => localStorage.removeItem(key));
+}
+
+export function clearSession() {
+  clearLocalSession();
 }
 
 export function hasSession(): boolean {

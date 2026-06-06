@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import BottomNav from "@/components/BottomNav";
 import { useStoredZones } from "@/hooks/useStoredZones";
+import { updateProfile } from "@/lib/database";
 import { saveActiveZone } from "@/lib/storage";
 import { getMapsDirectionsUrl, getZoneSlug } from "@/lib/zoneCoordinates";
 import type { Zone } from "@/types";
@@ -50,12 +51,19 @@ export default function ZoneDetailPage() {
     }
   }, [isReady, zone]);
 
-  const handleStartDriving = () => {
+  const handleStartDriving = async () => {
     if (!zone) {
       return;
     }
 
     saveActiveZone(zone.name);
+
+    try {
+      await updateProfile({ active_zone: zone.name });
+    } catch {
+      // Local cache still updated.
+    }
+
     window.open(getMapsDirectionsUrl(zone.name), "_blank", "noopener,noreferrer");
   };
 

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import OnboardingScreen from "@/components/OnboardingScreen";
 import { getCurrentAreaName, getGeolocationErrorMessage } from "@/lib/geolocation";
-import { saveLocation } from "@/lib/storage";
+import { cacheSearchLocally, saveLocation } from "@/lib/storage";
 import type { Platform, Zone } from "@/types";
 
 type ZonesApiResponse = {
@@ -81,17 +81,16 @@ export default function OnboardingPage() {
         throw new Error("No zones returned from API");
       }
 
-      localStorage.setItem("zonein_results", JSON.stringify(zones));
-      localStorage.setItem("zonein_platform", selectedPlatform);
-      localStorage.setItem("zonein_location", location.trim());
-      localStorage.setItem("zonein_source", source ?? "unknown");
-      if (reason) {
-        localStorage.setItem("zonein_source_reason", reason);
-      } else {
-        localStorage.removeItem("zonein_source_reason");
-      }
+      cacheSearchLocally({
+        zones,
+        platform: selectedPlatform,
+        location: location.trim(),
+        source: source ?? "unknown",
+        sourceReason: reason,
+      });
 
       router.push("/zones");
+      router.refresh();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Something went wrong. Try again."

@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import BottomNav from "@/components/BottomNav";
 import ZoneCard from "@/components/ZoneCard";
 import { useStoredZones } from "@/hooks/useStoredZones";
-import { hasSession, loadLocation } from "@/lib/storage";
+import { loadLocation } from "@/lib/storage";
 
 const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
   ssr: false,
@@ -20,7 +20,7 @@ const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
 
 export default function ZonesPage() {
   const router = useRouter();
-  const { zones, isReady } = useStoredZones();
+  const { zones, isReady, hasSearch } = useStoredZones();
   const [currentTime, setCurrentTime] = useState("");
   const [driverArea, setDriverArea] = useState("");
 
@@ -29,10 +29,10 @@ export default function ZonesPage() {
       return;
     }
 
-    if (!hasSession()) {
+    if (!hasSearch) {
       router.replace("/");
     }
-  }, [isReady, router]);
+  }, [hasSearch, isReady, router]);
 
   useEffect(() => {
     setDriverArea(loadLocation());
@@ -63,7 +63,7 @@ export default function ZonesPage() {
     return zones.reduce((sum, zone) => sum + zone.activeJobs, 0);
   }, [zones]);
 
-  if (!isReady) {
+  if (!isReady || !hasSearch) {
     return (
       <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
         Loading zones...

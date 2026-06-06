@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import BottomNav from "@/components/BottomNav";
 import { useStoredZones } from "@/hooks/useStoredZones";
+import { getProfile } from "@/lib/database";
 import { loadActiveZone, loadLocation } from "@/lib/storage";
 
 export default function ShiftPage() {
@@ -11,8 +12,23 @@ export default function ShiftPage() {
   const [driverArea, setDriverArea] = useState("");
 
   useEffect(() => {
-    setDriverArea(loadLocation());
-    setActiveZone(loadActiveZone() ?? zones[0]?.name ?? "Hackney");
+    async function loadShiftData() {
+      setDriverArea(loadLocation());
+
+      try {
+        const profile = await getProfile();
+        setActiveZone(
+          profile?.active_zone ??
+            loadActiveZone() ??
+            zones[0]?.name ??
+            "Hackney"
+        );
+      } catch {
+        setActiveZone(loadActiveZone() ?? zones[0]?.name ?? "Hackney");
+      }
+    }
+
+    loadShiftData();
   }, [zones]);
 
   const shiftEvents = useMemo(() => {

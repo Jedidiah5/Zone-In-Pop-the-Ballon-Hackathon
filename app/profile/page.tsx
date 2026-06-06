@@ -4,13 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import BottomNav from "@/components/BottomNav";
 import PlatformIcon from "@/components/PlatformIcon";
-import {
-  clearSession,
-  loadLocation,
-  loadPlatform,
-  loadPreferredZones,
-  saveLocation,
-} from "@/lib/storage";
+import { getProfile, signOut, updateProfile } from "@/lib/database";
+import { loadPreferredZones, saveLocation } from "@/lib/storage";
 import type { Platform } from "@/types";
 
 const PLATFORM_LABELS: Record<Platform, string> = {
@@ -24,39 +19,74 @@ export default function ProfilePage() {
   const router = useRouter();
   const [platform, setPlatform] = useState<Platform>("bolt");
   const [homeArea, setHomeArea] = useState("");
+  const [email, setEmail] = useState("");
   const [preferredZones, setPreferredZones] = useState<string[]>([]);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   useEffect(() => {
-    const storedPlatform = loadPlatform();
-    const storedLocation = loadLocation();
+    async function loadProfile() {
+      try {
+        const profile = await getProfile();
 
-    if (storedPlatform) {
-      setPlatform(storedPlatform);
+        if (profile?.platform) {
+          setPlatform(profile.platform);
+        }
+        if (profile?.home_area) {
+          setHomeArea(profile.home_area);
+        }
+        if (profile?.email) {
+          setEmail(profile.email);
+        }
+      } catch {
+        // Profile loads from local cache if Supabase is unavailable.
+      }
+
+      setPreferredZones(loadPreferredZones());
     }
-    if (storedLocation) {
-      setHomeArea(storedLocation);
-    }
-    setPreferredZones(loadPreferredZones());
+
+    loadProfile();
   }, []);
 
-  const handleHomeAreaBlur = () => {
-    if (homeArea.trim()) {
-      saveLocation(homeArea);
+  const handleHomeAreaBlur = async () => {
+    if (!homeArea.trim()) {
+      return;
+    }
+
+    saveLocation(homeArea);
+
+    try {
+      await updateProfile({ home_area: homeArea.trim() });
+    } catch {
+      // Local cache still updated.
     }
   };
 
-  const handleSignOut = () => {
-    clearSession();
-    router.push("/");
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+
+    try {
+      await signOut();
+      router.push("/login");
+      router.refresh();
+    } catch {
+      setIsSigningOut(false);
+    }
   };
 
   return (
     <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
       <div className="mx-auto max-w-3xl">
         <div className="mb-6 flex items-start justify-between gap-3">
-          <h1 className="text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
-            My Profile
-          </h1>
+          <div>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
+              My Profile
+            </h1>
+            {email && (
+              <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[#555555]">
+                {email}
+              </p>
+            )}
+          </div>
           <button
             className="touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[#F5A623] active:opacity-80"
             onClick={() => router.push("/")}
@@ -132,11 +162,12 @@ export default function ProfilePage() {
         </section>
 
         <button
-          className="w-full touch-manipulation py-3 text-center text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:text-white"
+          className="w-full touch-manipulation py-3 text-center text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:text-white disabled:opacity-60"
+          disabled={isSigningOut}
           onClick={handleSignOut}
           type="button"
         >
-          Sign out
+          {isSigningOut ? "Signing out..." : "Sign out"}
         </button>
       </div>
 
