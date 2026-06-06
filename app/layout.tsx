@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import zoneInLogo from "./Zoneinlogo.png";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,8 +16,8 @@ export const metadata: Metadata = {
   title: "ZoneIn",
   description: "Find the best zones for gig drivers",
   icons: {
-    icon: zoneInLogo.src,
-    apple: zoneInLogo.src,
+    icon: "/icon.png",
+    apple: "/icon.png",
   },
 };
 
