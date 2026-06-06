@@ -111,12 +111,12 @@ export default function EarningsPage() {
                   <Bar
                     dataKey="earnings"
                     fill="#F5A623"
-                    radius={[10, 10, 0, 0]}
+                    radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full rounded-[14px] border border-[#2A2A2A] bg-[#0A0A0A]" />
+              <div className="h-full rounded-md border border-[#2A2A2A] bg-[#0A0A0A]" />
             )}
           </div>
         </section>

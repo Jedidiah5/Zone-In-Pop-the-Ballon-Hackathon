@@ -61,7 +61,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="relative -mt-8 rounded-t-[28px] bg-[#1A1A1A] px-6 pb-8 pt-8">
+        <div className="relative -mt-8 rounded-t-lg bg-[#1A1A1A] px-6 pb-8 pt-8">
           <h1 className="text-2xl font-bold tracking-[-0.05em]">
             Built for London gig drivers
           </h1>
@@ -119,7 +119,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center gap-3">
               <Link
-                className="rounded-[14px] px-5 py-2.5 text-sm font-bold text-[#888888] hover:text-white"
+                className="rounded-md px-5 py-2.5 text-sm font-bold text-[#888888] hover:text-white"
                 href="/login"
               >
                 Sign in
@@ -175,7 +175,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="relative h-[520px] overflow-hidden rounded-[28px] border border-[#2A2A2A]">
+          <div className="relative h-[520px] overflow-hidden rounded-lg border border-[#2A2A2A]">
             <Image
               alt="London driver with zone map"
               className="object-cover"
@@ -215,7 +215,7 @@ export default function LandingPage() {
                   </div>
                   <div className="p-5">
                     <div className="mb-3 flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#F5A623]/15">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-md bg-[#F5A623]/15">
                         <Icon
                           aria-hidden="true"
                           className="text-[#F5A623]"

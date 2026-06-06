@@ -111,7 +111,7 @@ export default function ZoneCard({
       <p className="text-sm leading-relaxed text-[#888888]">{zone.reasoning}</p>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-[14px] border border-[#2A2A2A] bg-[#0A0A0A] p-3">
+        <div className="rounded-md border border-[#2A2A2A] bg-[#0A0A0A] p-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
             Surge
           </p>
@@ -119,7 +119,7 @@ export default function ZoneCard({
             {zone.surgeMultiplier}x
           </p>
         </div>
-        <div className="rounded-[14px] border border-[#2A2A2A] bg-[#0A0A0A] p-3">
+        <div className="rounded-md border border-[#2A2A2A] bg-[#0A0A0A] p-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#555555]">
             Jobs
           </p>

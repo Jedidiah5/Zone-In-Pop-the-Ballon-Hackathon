@@ -105,7 +105,7 @@ export default function ProfilePage() {
             )}
           </div>
           <button
-            className="shrink-0 rounded-[14px] border border-[#2A2A2A] bg-[#1E1E1E] px-4 py-2 text-sm font-bold text-[#F5A623] active:opacity-80"
+            className="shrink-0 rounded-md border border-[#2A2A2A] bg-[#1E1E1E] px-4 py-2 text-sm font-bold text-[#F5A623] active:opacity-80"
             onClick={() => router.push("/onboarding")}
             type="button"
           >

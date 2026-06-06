@@ -133,7 +133,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           </div>
         </div>
 
-        <div className="relative -mt-8 flex flex-1 flex-col rounded-t-[28px] bg-[#1A1A1A] px-6 pb-8 pt-8 lg:mt-0 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
+        <div className="relative -mt-8 flex flex-1 flex-col rounded-t-lg bg-[#1A1A1A] px-6 pb-8 pt-8 lg:mt-0 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
           <div className="mx-auto w-full max-w-md">
             <h1 className="text-2xl font-bold tracking-[-0.05em] lg:text-3xl">
               {isSignup ? "Create account" : "Welcome back"}
@@ -186,7 +186,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               {error && (
                 <p
-                  className="rounded-[14px] border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
+                  className="rounded-md border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
                   role="alert"
                 >
                   {error}
@@ -195,7 +195,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               {message && (
                 <p
-                  className="rounded-[14px] border border-[#00FF94]/40 bg-[#00FF94]/10 px-4 py-3 text-sm font-bold text-[#00FF94]"
+                  className="rounded-md border border-[#00FF94]/40 bg-[#00FF94]/10 px-4 py-3 text-sm font-bold text-[#00FF94]"
                   role="status"
                 >
                   {message}

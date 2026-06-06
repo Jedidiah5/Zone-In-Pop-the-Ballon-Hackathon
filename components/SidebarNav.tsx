@@ -34,7 +34,7 @@ export default function SidebarNav() {
           return (
             <Link
               key={item.href}
-              className={`flex items-center gap-3 rounded-[14px] px-4 py-3.5 text-sm font-bold transition-colors ${
+              className={`flex items-center gap-3 rounded-md px-4 py-3.5 text-sm font-bold transition-colors ${
                 isActive
                   ? "bg-[#F5A623] text-[#0A0A0A]"
                   : "text-[#888888] hover:bg-[#1A1A1A] hover:text-white"

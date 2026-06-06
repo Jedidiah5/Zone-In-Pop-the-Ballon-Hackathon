@@ -32,7 +32,7 @@ export default function BottomNav() {
               href={item.href}
             >
               <span
-                className={`flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${
+                className={`flex h-9 w-9 items-center justify-center rounded-md transition-colors ${
                   isActive ? "bg-[#F5A623]/15" : ""
                 }`}
               >

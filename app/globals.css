@@ -14,9 +14,9 @@
   --success: #00ff94;
   --danger: #ff3b30;
   --text-muted: #888888;
-  --radius-sheet: 28px;
-  --radius-card: 20px;
-  --radius-btn: 14px;
+  --radius-sheet: 10px;
+  --radius-card: 8px;
+  --radius-btn: 6px;
   --shadow-float: 0 8px 32px rgba(0, 0, 0, 0.45);
   --shadow-sheet: 0 -8px 40px rgba(0, 0, 0, 0.55);
 }
@@ -170,7 +170,7 @@ body {
   }
 
   .bolt-float-chip {
-    border-radius: 9999px;
+    border-radius: var(--radius-card);
     border: 1px solid var(--border-subtle);
     background: var(--surface-float);
     backdrop-filter: blur(12px);
@@ -178,14 +178,14 @@ body {
   }
 
   .bolt-hero-curve {
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
+    border-bottom-left-radius: var(--radius-sheet);
+    border-bottom-right-radius: var(--radius-sheet);
   }
 
   @media (min-width: 1024px) {
     .bolt-hero-curve {
       border-bottom-left-radius: 0;
-      border-bottom-right-radius: 2rem;
+      border-bottom-right-radius: var(--radius-sheet);
     }
   }
 }

@@ -138,7 +138,7 @@ export default function OnboardingWizard({
 
   return (
     <main className="min-h-dvh bg-[#0A0A0A] text-white lg:flex lg:items-center lg:justify-center lg:px-8 lg:py-10">
-      <div className="mx-auto flex w-full max-w-lg flex-col lg:max-w-5xl lg:flex-row lg:overflow-hidden lg:rounded-[28px] lg:border lg:border-[#2A2A2A]">
+      <div className="mx-auto flex w-full max-w-lg flex-col lg:max-w-5xl lg:flex-row lg:overflow-hidden lg:rounded-lg lg:border lg:border-[#2A2A2A]">
         <div className="bolt-hero-curve relative h-[38dvh] shrink-0 overflow-hidden lg:h-auto lg:min-h-[560px] lg:w-[42%] lg:rounded-none">
           <Image
             alt=""
@@ -154,7 +154,7 @@ export default function OnboardingWizard({
           </div>
         </div>
 
-        <div className="relative -mt-6 flex flex-1 flex-col rounded-t-[28px] bg-[#1A1A1A] px-6 pb-8 pt-6 lg:mt-0 lg:rounded-none lg:px-8 lg:py-8">
+        <div className="relative -mt-6 flex flex-1 flex-col rounded-t-lg bg-[#1A1A1A] px-6 pb-8 pt-6 lg:mt-0 lg:rounded-none lg:px-8 lg:py-8">
           <div className="mb-5">
             <div className="mb-3 flex items-center justify-between">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
@@ -280,7 +280,7 @@ export default function OnboardingWizard({
                   {VEHICLES.map((vehicle) => (
                     <button
                       key={vehicle.id}
-                      className={`flex h-20 touch-manipulation flex-col items-center justify-center gap-1 rounded-[20px] border text-sm font-bold active:opacity-80 ${
+                      className={`flex h-20 touch-manipulation flex-col items-center justify-center gap-1 rounded-md border text-sm font-bold active:opacity-80 ${
                         vehicleType === vehicle.id
                           ? "border-[#F5A623] bg-[#F5A623]/12 text-white"
                           : "border-[#2A2A2A] bg-[#1E1E1E] text-[#888888]"
@@ -301,7 +301,7 @@ export default function OnboardingWizard({
                   {SHIFTS.map((shift) => (
                     <button
                       key={shift.id}
-                      className={`flex w-full touch-manipulation items-center justify-between rounded-[20px] border px-4 py-3.5 text-left active:opacity-80 ${
+                      className={`flex w-full touch-manipulation items-center justify-between rounded-md border px-4 py-3.5 text-left active:opacity-80 ${
                         shiftPreference === shift.id
                           ? "border-[#F5A623] bg-[#F5A623]/12"
                           : "border-[#2A2A2A] bg-[#1E1E1E]"
@@ -320,7 +320,7 @@ export default function OnboardingWizard({
 
           {(stepError || error) && (
             <p
-              className="mb-4 rounded-[14px] border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
+              className="mb-4 rounded-md border border-[#FF3B30]/40 bg-[#FF3B30]/10 px-4 py-3 text-sm font-bold text-[#FF3B30]"
               role="alert"
             >
               {stepError || error}
