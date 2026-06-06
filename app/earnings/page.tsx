@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -20,6 +21,12 @@ const EARNINGS_DATA = [
 ];
 
 export default function EarningsPage() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#0A0A0A] px-5 pb-28 pt-8 text-white">
       <div className="mx-auto max-w-3xl">
@@ -58,36 +65,44 @@ export default function EarningsPage() {
           <h2 className="mb-5 text-xl font-bold tracking-[-0.04em] text-white">
             Earnings by Zone
           </h2>
-          <div className="h-64">
-            <ResponsiveContainer height="100%" width="100%">
-              <BarChart data={EARNINGS_DATA}>
-                <CartesianGrid stroke="#222222" vertical={false} />
-                <XAxis
-                  axisLine={false}
-                  dataKey="zone"
-                  tick={{ fill: "#888888", fontSize: 12, fontWeight: 700 }}
-                  tickLine={false}
-                />
-                <YAxis
-                  axisLine={false}
-                  tick={{ fill: "#888888", fontSize: 12, fontWeight: 700 }}
-                  tickFormatter={(value) => `£${value}`}
-                  tickLine={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: "#141414",
-                    border: "1px solid #222222",
-                    borderRadius: 12,
-                    color: "#FFFFFF",
-                    fontWeight: 700,
-                  }}
-                  cursor={{ fill: "#F5A623", opacity: 0.08 }}
-                  formatter={(value) => [`£${value}`, "Earned"]}
-                />
-                <Bar dataKey="earnings" fill="#F5A623" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="h-64 min-h-64">
+            {isMounted ? (
+              <ResponsiveContainer height="100%" width="100%">
+                <BarChart data={EARNINGS_DATA}>
+                  <CartesianGrid stroke="#222222" vertical={false} />
+                  <XAxis
+                    axisLine={false}
+                    dataKey="zone"
+                    tick={{ fill: "#888888", fontSize: 12, fontWeight: 700 }}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tick={{ fill: "#888888", fontSize: 12, fontWeight: 700 }}
+                    tickFormatter={(value) => `£${value}`}
+                    tickLine={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: "#141414",
+                      border: "1px solid #222222",
+                      borderRadius: 12,
+                      color: "#FFFFFF",
+                      fontWeight: 700,
+                    }}
+                    cursor={{ fill: "#F5A623", opacity: 0.08 }}
+                    formatter={(value) => [`£${value}`, "Earned"]}
+                  />
+                  <Bar
+                    dataKey="earnings"
+                    fill="#F5A623"
+                    radius={[8, 8, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full rounded-lg border border-[#222222] bg-[#0A0A0A]" />
+            )}
           </div>
         </section>
 
