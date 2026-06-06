@@ -15,6 +15,8 @@ const KEYS = {
   vehicleType: "zonein_vehicle_type",
   shiftPreference: "zonein_shift_preference",
   onboardingCompleted: "zonein_onboarding_completed",
+  paid: "zonein_paid",
+  guest: "zonein_guest",
 } as const;
 
 type SearchCache = {
@@ -193,4 +195,29 @@ export function hasSession(): boolean {
   }
 
   return Boolean(localStorage.getItem(KEYS.results));
+}
+
+export function isPaidSubscriber(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return localStorage.getItem(KEYS.paid) === "true";
+}
+
+export function setPaidSubscriber() {
+  localStorage.setItem(KEYS.paid, "true");
+  localStorage.removeItem(KEYS.guest);
+}
+
+export function isGuestUser(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return localStorage.getItem(KEYS.guest) === "true";
+}
+
+export function setGuestAccess() {
+  localStorage.setItem(KEYS.guest, "true");
 }

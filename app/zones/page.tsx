@@ -2,13 +2,19 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import BottomSheet from "@/components/BottomSheet";
+import PaywallModal from "@/components/PaywallModal";
 import ZoneCard from "@/components/ZoneCard";
 import { useStoredZones } from "@/hooks/useStoredZones";
-import { loadLocation } from "@/lib/storage";
+import {
+  isGuestUser,
+  isPaidSubscriber,
+  loadLocation,
+  setPaidSubscriber,
+} from "@/lib/storage";
 
 const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
   ssr: false,
@@ -19,12 +25,16 @@ const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
   ),
 });
 
-export default function ZonesPage() {
+function ZonesPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { zones, isReady, hasSearch } = useStoredZones();
   const [currentTime, setCurrentTime] = useState("");
   const [driverArea, setDriverArea] = useState("");
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [showGuestBanner, setShowGuestBanner] = useState(false);
+  const [paywallReady, setPaywallReady] = useState(false);
 
   useEffect(() => {
     if (!isReady) {
@@ -39,6 +49,32 @@ export default function ZonesPage() {
   useEffect(() => {
     setDriverArea(loadLocation());
   }, []);
+
+  useEffect(() => {
+    const paidParam = searchParams.get("paid");
+
+    if (paidParam === "true") {
+      setPaidSubscriber();
+      setShowPaywall(false);
+      setShowGuestBanner(false);
+      router.replace("/zones");
+      setPaywallReady(true);
+      return;
+    }
+
+    if (isPaidSubscriber()) {
+      setShowPaywall(false);
+      setShowGuestBanner(false);
+    } else if (isGuestUser()) {
+      setShowPaywall(false);
+      setShowGuestBanner(true);
+    } else {
+      setShowPaywall(true);
+      setShowGuestBanner(false);
+    }
+
+    setPaywallReady(true);
+  }, [searchParams, router]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -64,6 +100,21 @@ export default function ZonesPage() {
   const activeJobs = useMemo(() => {
     return zones.reduce((sum, zone) => sum + zone.activeJobs, 0);
   }, [zones]);
+
+  const guestBanner = showGuestBanner ? (
+    <div className="fixed left-0 right-0 top-0 z-[90] flex items-center justify-between gap-3 border-b border-[#F5A623]/30 bg-[#F5A623]/15 px-4 pb-2 pt-safe">
+      <p className="text-xs font-bold text-black lg:text-sm">
+        You&apos;re on the free preview — upgrade for full shift intelligence
+      </p>
+      <button
+        className="shrink-0 text-xs font-bold text-[#F5A623] active:opacity-80"
+        onClick={() => setShowPaywall(true)}
+        type="button"
+      >
+        Upgrade →
+      </button>
+    </div>
+  ) : null;
 
   const sheetHeader = (
     <div className="w-full text-left">
@@ -96,7 +147,7 @@ export default function ZonesPage() {
     </div>
   );
 
-  if (!isReady || !hasSearch) {
+  if (!isReady || !hasSearch || !paywallReady) {
     return (
       <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
         Loading zones...
@@ -106,8 +157,19 @@ export default function ZonesPage() {
 
   return (
     <AppLayout fullBleed hideNav={false}>
+      {guestBanner}
+
+      {showPaywall && (
+        <PaywallModal
+          onClose={() => setShowPaywall(false)}
+          onGuestContinue={() => setShowGuestBanner(true)}
+        />
+      )}
+
       {/* Mobile: map-first + bottom sheet */}
-      <div className="relative h-dvh overflow-hidden lg:hidden">
+      <div
+        className={`relative h-dvh overflow-hidden lg:hidden ${showGuestBanner ? "pt-10" : ""}`}
+      >
         <div className="absolute inset-0">
           <DynamicZonesMap
             interactive
@@ -117,13 +179,17 @@ export default function ZonesPage() {
           />
         </div>
 
-        <div className="absolute left-4 top-safe z-20 pt-3">
+        <div
+          className={`absolute left-4 z-20 pt-3 ${showGuestBanner ? "top-10" : "top-safe"}`}
+        >
           <div className="bolt-float-chip flex items-center gap-2 px-3 py-2 text-xs font-bold text-black">
             <span className="h-2 w-2 animate-pulse rounded-full bg-black" />
             LIVE
           </div>
         </div>
-        <div className="absolute right-4 top-safe z-20 pt-3">
+        <div
+          className={`absolute right-4 z-20 pt-3 ${showGuestBanner ? "top-10" : "top-safe"}`}
+        >
           <div className="bolt-float-chip px-3 py-2 text-sm font-bold text-black">
             {currentTime}
           </div>
@@ -145,7 +211,9 @@ export default function ZonesPage() {
       </div>
 
       {/* Desktop: professional split dashboard */}
-      <div className="hidden min-h-dvh lg:grid lg:grid-cols-[minmax(0,1fr)_420px]">
+      <div
+        className={`hidden min-h-dvh lg:grid lg:grid-cols-[minmax(0,1fr)_420px] ${showGuestBanner ? "pt-10" : ""}`}
+      >
         <div className="relative min-h-dvh">
           <DynamicZonesMap
             interactive
@@ -206,5 +274,19 @@ export default function ZonesPage() {
         </aside>
       </div>
     </AppLayout>
+  );
+}
+
+export default function ZonesPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
+          Loading zones...
+        </main>
+      }
+    >
+      <ZonesPageContent />
+    </Suspense>
   );
 }
