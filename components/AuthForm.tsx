@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getAuthErrorMessage } from "@/lib/authErrors";
 import { createClient } from "@/lib/supabase/client";
 
 type AuthFormProps = {
@@ -26,11 +27,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setIsLoading(true);
 
     const supabase = createClient();
+    const normalizedEmail = email.trim().toLowerCase();
 
     try {
       if (isSignup) {
-        const { error: signUpError } = await supabase.auth.signUp({
-          email: email.trim(),
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email: normalizedEmail,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
@@ -41,31 +43,25 @@ export default function AuthForm({ mode }: AuthFormProps) {
           throw signUpError;
         }
 
-        const { data: signInData, error: signInError } =
-          await supabase.auth.signInWithPassword({
-            email: email.trim(),
-            password,
-          });
-
-        if (signInError) {
-          setMessage(
-            "Account created. Check your email to confirm, then sign in."
-          );
+        if (data.user?.identities?.length === 0) {
+          setError("This email is already registered. Sign in instead.");
           return;
         }
 
-        if (signInData.session) {
+        if (data.session) {
           router.push("/");
           router.refresh();
           return;
         }
 
-        setMessage("Account created. Check your email to confirm your account.");
+        setMessage(
+          "Account created. Check your email to confirm your account, then sign in."
+        );
         return;
       }
 
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: normalizedEmail,
         password,
       });
 
@@ -76,9 +72,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
       router.push("/");
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Authentication failed. Try again."
-      );
+      setError(getAuthErrorMessage(err));
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +92,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           <p className="mt-5 text-base font-medium leading-7 text-[#888888]">
             {isSignup
               ? "Sign up to save your zones and profile across devices."
-              : "Sign in to access your live zone intelligence."}
+              : "Sign in with the email and password you used to sign up."}
           </p>
         </div>
 
@@ -176,7 +170,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </form>
 
         <p className="mt-6 text-center text-sm font-bold text-[#888888]">
-          {isSignup ? "Already have an account?" : "New to ZoneIn?"}{" "}
+          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
           <Link
             className="text-[#F5A623] active:opacity-80"
             href={isSignup ? "/login" : "/signup"}
