@@ -27,7 +27,7 @@ export default function BottomNav() {
         return (
           <Link
             key={item.href}
-            className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 text-[11px] font-bold uppercase tracking-[0.08em] transition-all active:scale-95"
+            className="flex min-h-[56px] min-w-0 flex-1 touch-manipulation flex-col items-center justify-center gap-1 text-[11px] font-bold uppercase tracking-[0.08em] active:opacity-80"
             href={item.href}
           >
             <Icon

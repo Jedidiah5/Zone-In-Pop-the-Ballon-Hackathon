@@ -1,50 +1,79 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import BottomNav from "@/components/BottomNav";
+import PlatformIcon from "@/components/PlatformIcon";
+import {
+  clearSession,
+  loadLocation,
+  loadPlatform,
+  loadPreferredZones,
+  saveLocation,
+} from "@/lib/storage";
 import type { Platform } from "@/types";
 
-const PLATFORM_CONFIG: Record<Platform, { label: string; dotClass: string }> = {
-  uber: { label: "Uber", dotClass: "bg-black border border-[#333333]" },
-  bolt: { label: "Bolt", dotClass: "bg-[#00FF94]" },
-  deliveroo: { label: "Deliveroo", dotClass: "bg-[#00C2B8]" },
-  stuart: { label: "Stuart", dotClass: "bg-[#7B61FF]" },
+const PLATFORM_LABELS: Record<Platform, string> = {
+  uber: "Uber",
+  bolt: "Bolt",
+  deliveroo: "Deliveroo",
+  stuart: "Stuart",
 };
 
-const DEFAULT_ZONES = ["Soho", "Shoreditch", "Angel", "Camden", "Borough"];
-
 export default function ProfilePage() {
+  const router = useRouter();
   const [platform, setPlatform] = useState<Platform>("bolt");
-  const [homeArea, setHomeArea] = useState("Shoreditch");
-  const platformConfig = PLATFORM_CONFIG[platform];
+  const [homeArea, setHomeArea] = useState("");
+  const [preferredZones, setPreferredZones] = useState<string[]>([]);
 
   useEffect(() => {
-    const storedPlatform = localStorage.getItem("zonein_platform") as Platform | null;
-    const storedLocation = localStorage.getItem("zonein_location");
+    const storedPlatform = loadPlatform();
+    const storedLocation = loadLocation();
 
-    if (storedPlatform && storedPlatform in PLATFORM_CONFIG) {
+    if (storedPlatform) {
       setPlatform(storedPlatform);
     }
     if (storedLocation) {
       setHomeArea(storedLocation);
     }
+    setPreferredZones(loadPreferredZones());
   }, []);
 
+  const handleHomeAreaBlur = () => {
+    if (homeArea.trim()) {
+      saveLocation(homeArea);
+    }
+  };
+
+  const handleSignOut = () => {
+    clearSession();
+    router.push("/");
+  };
+
   return (
-    <main className="min-h-screen bg-[#0A0A0A] px-5 pb-28 pt-8 text-white">
+    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
       <div className="mx-auto max-w-3xl">
-        <h1 className="mb-6 text-[32px] font-bold leading-tight tracking-[-0.05em] text-white">
-          My Profile
-        </h1>
+        <div className="mb-6 flex items-start justify-between gap-3">
+          <h1 className="text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
+            My Profile
+          </h1>
+          <button
+            className="touch-manipulation rounded-lg border border-[#222222] bg-[#141414] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[#F5A623] active:opacity-80"
+            onClick={() => router.push("/")}
+            type="button"
+          >
+            New search
+          </button>
+        </div>
 
         <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-5">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
             Platform
           </p>
           <div className="flex items-center gap-4">
-            <span className={`h-5 w-5 rounded-full ${platformConfig.dotClass}`} />
-            <span className="text-3xl font-bold tracking-[-0.05em] text-white">
-              {platformConfig.label}
+            <PlatformIcon platform={platform} size={44} />
+            <span className="text-2xl font-bold tracking-[-0.05em] text-white">
+              {PLATFORM_LABELS[platform]}
             </span>
           </div>
         </section>
@@ -57,32 +86,40 @@ export default function ProfilePage() {
             Home area
           </label>
           <input
-            className="h-14 w-full rounded-lg border border-[#222222] bg-[#0A0A0A] px-4 text-xl font-bold text-white outline-none transition-colors focus:border-[#F5A623]"
+            className="h-14 w-full touch-manipulation rounded-lg border border-[#222222] bg-[#0A0A0A] px-4 text-lg font-bold text-white outline-none transition-colors focus:border-[#F5A623]"
             id="home-area"
+            onBlur={handleHomeAreaBlur}
             onChange={(event) => setHomeArea(event.target.value)}
+            placeholder="e.g. Shoreditch"
             value={homeArea}
           />
         </section>
 
         <section className="mb-5 rounded-xl border border-[#222222] bg-[#141414] p-5">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
-            Preferred zones
+            Top zones from last search
           </p>
           <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1">
-            {DEFAULT_ZONES.map((zone) => (
-              <span
-                className="whitespace-nowrap rounded-full border border-[#F5A623] bg-[#F5A623]/10 px-4 py-2 text-sm font-bold text-[#F5A623]"
-                key={zone}
-              >
-                {zone}
+            {preferredZones.length ? (
+              preferredZones.map((zone) => (
+                <span
+                  className="whitespace-nowrap rounded-full border border-[#F5A623] bg-[#F5A623]/10 px-4 py-2 text-sm font-bold text-[#F5A623]"
+                  key={zone}
+                >
+                  {zone}
+                </span>
+              ))
+            ) : (
+              <span className="text-sm font-bold text-[#888888]">
+                Run a search to see your zones
               </span>
-            ))}
+            )}
           </div>
         </section>
 
         <section className="mb-8 rounded-xl border border-[#F5A623] bg-[#141414] p-5">
           <div className="mb-3 flex items-center justify-between gap-4">
-            <h2 className="text-2xl font-bold tracking-[-0.05em] text-[#F5A623]">
+            <h2 className="text-xl font-bold tracking-[-0.05em] text-[#F5A623]">
               ZoneIn Pro
             </h2>
             <span className="rounded-full border border-[#00FF94] bg-[#00FF94]/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#00FF94]">
@@ -95,10 +132,11 @@ export default function ProfilePage() {
         </section>
 
         <button
-          className="w-full text-center text-sm font-bold uppercase tracking-[0.12em] text-[#888888]"
+          className="w-full touch-manipulation py-3 text-center text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:text-white"
+          onClick={handleSignOut}
           type="button"
         >
-          Sign Out
+          Sign out
         </button>
       </div>
 

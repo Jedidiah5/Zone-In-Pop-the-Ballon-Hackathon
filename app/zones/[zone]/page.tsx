@@ -1,16 +1,13 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Navigation } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { MOCK_ZONES } from "@/lib/mockZones";
+import BottomNav from "@/components/BottomNav";
+import { useStoredZones } from "@/hooks/useStoredZones";
+import { saveActiveZone } from "@/lib/storage";
+import { getMapsDirectionsUrl, getZoneSlug } from "@/lib/zoneCoordinates";
 import type { Zone } from "@/types";
-
-function getZoneSlug(name: string) {
-  return encodeURIComponent(
-    name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")
-  );
-}
 
 function getPotentialConfig(potential: Zone["potential"]) {
   switch (potential) {
@@ -35,40 +32,78 @@ function getPotentialConfig(potential: Zone["potential"]) {
 export default function ZoneDetailPage() {
   const router = useRouter();
   const params = useParams<{ zone: string }>();
-  const [zones, setZones] = useState<Zone[]>(MOCK_ZONES);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("zonein_results");
-    if (!stored) {
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(stored) as Zone[];
-      if (parsed.length) {
-        setZones(parsed);
-      }
-    } catch {
-      setZones(MOCK_ZONES);
-    }
-  }, []);
+  const { zones, isReady } = useStoredZones();
+  const [notFound, setNotFound] = useState(false);
 
   const zone = useMemo(() => {
     const requestedSlug = params.zone;
-    return (
-      zones.find((item) => getZoneSlug(item.name) === requestedSlug) ??
-      MOCK_ZONES[0]
-    );
+    return zones.find((item) => getZoneSlug(item.name) === requestedSlug);
   }, [params.zone, zones]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+
+    if (!zone) {
+      setNotFound(true);
+    }
+  }, [isReady, zone]);
+
+  const handleStartDriving = () => {
+    if (!zone) {
+      return;
+    }
+
+    saveActiveZone(zone.name);
+    window.open(getMapsDirectionsUrl(zone.name), "_blank", "noopener,noreferrer");
+  };
+
+  if (!isReady) {
+    return (
+      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
+        Loading zone...
+      </main>
+    );
+  }
+
+  if (notFound || !zone) {
+    return (
+      <main className="flex min-h-dvh flex-col bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
+        <button
+          className="mb-8 flex touch-manipulation items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:opacity-80"
+          onClick={() => router.push("/zones")}
+          type="button"
+        >
+          <ArrowLeft aria-hidden="true" size={22} strokeWidth={2.5} />
+          Back to zones
+        </button>
+        <div className="flex flex-1 flex-col items-center justify-center text-center">
+          <p className="text-xl font-bold text-white">Zone not found</p>
+          <p className="mt-2 text-sm text-[#888888]">
+            Run a new search to refresh your zone list.
+          </p>
+          <button
+            className="mt-6 h-12 touch-manipulation rounded-lg bg-[#F5A623] px-6 text-sm font-bold uppercase tracking-[0.1em] text-[#0A0A0A] active:opacity-80"
+            onClick={() => router.push("/")}
+            type="button"
+          >
+            New search
+          </button>
+        </div>
+        <BottomNav />
+      </main>
+    );
+  }
 
   const potential = getPotentialConfig(zone.potential);
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] px-5 pb-28 pt-6 text-white">
+    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-36 pt-safe text-white">
       <div className="mx-auto max-w-4xl">
         <button
-          className="mb-6 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:scale-[0.98]"
-          onClick={() => router.back()}
+          className="mb-6 flex touch-manipulation items-center gap-3 text-sm font-bold uppercase tracking-[0.12em] text-[#888888] active:opacity-80"
+          onClick={() => router.push("/zones")}
           type="button"
         >
           <ArrowLeft aria-hidden="true" size={22} strokeWidth={2.5} />
@@ -76,17 +111,20 @@ export default function ZoneDetailPage() {
         </button>
 
         <header className="mb-6">
-          <h1 className="text-[32px] font-bold leading-tight tracking-[-0.05em] text-white">
+          <h1 className="text-[28px] font-bold leading-tight tracking-[-0.05em] text-white sm:text-[32px]">
             {zone.name}
           </h1>
+          <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-[#555555]">
+            {zone.distance}
+          </p>
           <div
-            className={`mt-4 inline-flex rounded-full border px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] ${potential.className}`}
+            className={`mt-4 inline-flex rounded px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] ${potential.className}`}
           >
             {potential.label}
           </div>
         </header>
 
-        <section className="mb-8 grid grid-cols-3 gap-3">
+        <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-[#222222] bg-[#141414] p-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#888888]">
               Surge
@@ -108,22 +146,22 @@ export default function ZoneDetailPage() {
               Demand Window
             </p>
             <p className="text-3xl font-bold tracking-[-0.05em] text-white">
-              ~{zone.demandWindowMinutes} mins
+              ~{zone.demandWindowMinutes}m
             </p>
           </div>
         </section>
 
-        <section className="mb-8 rounded-xl border border-[#222222] bg-[#141414] p-5">
-          <h2 className="mb-3 text-xl font-bold tracking-[-0.04em] text-white">
+        <section className="mb-6 rounded-xl border border-[#222222] bg-[#141414] p-5">
+          <h2 className="mb-3 text-lg font-bold tracking-[-0.04em] text-white">
             Why this zone?
           </h2>
-          <p className="text-base font-medium leading-7 text-[#888888]">
+          <p className="text-[15px] leading-7 text-[#888888]">
             {zone.detailedReasoning}
           </p>
         </section>
 
         <section className="rounded-xl border border-[#222222] bg-[#141414] p-5">
-          <h2 className="mb-4 text-xl font-bold tracking-[-0.04em] text-white">
+          <h2 className="mb-4 text-lg font-bold tracking-[-0.04em] text-white">
             Watch out for
           </h2>
           <div className="space-y-3 text-sm font-bold text-[#888888]">
@@ -151,14 +189,18 @@ export default function ZoneDetailPage() {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 border-t border-[#222222] bg-[#0A0A0A] p-5 pb-safe">
+      <div className="fixed bottom-[72px] left-0 right-0 border-t border-[#222222] bg-[#0A0A0A] p-5">
         <button
-          className="flex h-14 w-full items-center justify-center rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.12em] text-[#0A0A0A] active:scale-[0.98]"
+          className="flex h-14 w-full touch-manipulation cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.12em] text-[#0A0A0A] active:opacity-80"
+          onClick={handleStartDriving}
           type="button"
         >
-          START DRIVING HERE
+          <Navigation aria-hidden="true" size={18} strokeWidth={2.5} />
+          Start driving here
         </button>
       </div>
+
+      <BottomNav />
     </main>
   );
 }

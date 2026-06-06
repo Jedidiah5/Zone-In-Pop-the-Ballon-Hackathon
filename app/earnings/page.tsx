@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -11,26 +12,42 @@ import {
   YAxis,
 } from "recharts";
 import BottomNav from "@/components/BottomNav";
-
-const EARNINGS_DATA = [
-  { zone: "Soho", earnings: 18.4 },
-  { zone: "Hackney", earnings: 9.8 },
-  { zone: "Angel", earnings: 7.6 },
-  { zone: "Camden", earnings: 6.2 },
-  { zone: "Borough", earnings: 5.2 },
-];
+import { useStoredZones } from "@/hooks/useStoredZones";
 
 export default function EarningsPage() {
+  const router = useRouter();
+  const { zones, isReady } = useStoredZones();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  const earningsData = useMemo(() => {
+    return zones.slice(0, 5).map((zone) => ({
+      zone: zone.name.split(" ")[0],
+      earnings: Number((zone.surgeMultiplier * zone.activeJobs * 0.02).toFixed(1)),
+    }));
+  }, [zones]);
+
+  const totalEarnings = useMemo(() => {
+    return earningsData.reduce((sum, item) => sum + item.earnings, 0);
+  }, [earningsData]);
+
+  const bestZone = zones[0]?.name ?? "—";
+
+  if (!isReady) {
+    return (
+      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
+        Loading earnings...
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-[#0A0A0A] px-5 pb-28 pt-8 text-white">
+    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
       <div className="mx-auto max-w-3xl">
-        <h1 className="mb-6 text-[32px] font-bold leading-tight tracking-[-0.05em] text-white">
+        <h1 className="mb-6 text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
           Today&apos;s Shift
         </h1>
 
@@ -39,7 +56,7 @@ export default function EarningsPage() {
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Time Online
             </p>
-            <p className="text-5xl font-bold tracking-[-0.06em] text-white">
+            <p className="text-4xl font-bold tracking-[-0.06em] text-white sm:text-5xl">
               2h 34m
             </p>
           </div>
@@ -47,16 +64,16 @@ export default function EarningsPage() {
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Est. Earnings
             </p>
-            <p className="text-5xl font-bold tracking-[-0.06em] text-[#F5A623]">
-              £47.20
+            <p className="text-4xl font-bold tracking-[-0.06em] text-[#F5A623] sm:text-5xl">
+              £{totalEarnings.toFixed(2)}
             </p>
           </div>
           <div className="rounded-xl border border-[#222222] bg-[#141414] p-5">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Best Zone
             </p>
-            <p className="text-5xl font-bold tracking-[-0.06em] text-[#00FF94]">
-              Soho
+            <p className="text-4xl font-bold tracking-[-0.06em] text-[#00FF94] sm:text-5xl">
+              {bestZone}
             </p>
           </div>
         </section>
@@ -68,17 +85,17 @@ export default function EarningsPage() {
           <div className="h-64 min-h-64">
             {isMounted ? (
               <ResponsiveContainer height="100%" width="100%">
-                <BarChart data={EARNINGS_DATA}>
+                <BarChart data={earningsData}>
                   <CartesianGrid stroke="#222222" vertical={false} />
                   <XAxis
                     axisLine={false}
                     dataKey="zone"
-                    tick={{ fill: "#888888", fontSize: 12, fontWeight: 700 }}
+                    tick={{ fill: "#888888", fontSize: 11, fontWeight: 700 }}
                     tickLine={false}
                   />
                   <YAxis
                     axisLine={false}
-                    tick={{ fill: "#888888", fontSize: 12, fontWeight: 700 }}
+                    tick={{ fill: "#888888", fontSize: 11, fontWeight: 700 }}
                     tickFormatter={(value) => `£${value}`}
                     tickLine={false}
                   />
@@ -107,10 +124,11 @@ export default function EarningsPage() {
         </section>
 
         <button
-          className="flex h-14 w-full items-center justify-center rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.12em] text-[#0A0A0A] active:scale-[0.98]"
+          className="flex h-14 w-full touch-manipulation cursor-pointer items-center justify-center rounded-lg bg-[#F5A623] text-sm font-bold uppercase tracking-[0.12em] text-[#0A0A0A] active:opacity-80"
+          onClick={() => router.push("/shift")}
           type="button"
         >
-          Start New Shift
+          Start new shift
         </button>
       </div>
 

@@ -1,18 +1,54 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import BottomNav from "@/components/BottomNav";
-
-const SHIFT_EVENTS = [
-  { time: "20:12", label: "Started shift near Shoreditch" },
-  { time: "20:44", label: "Moved into Hackney demand pocket" },
-  { time: "21:18", label: "Best surge seen in Westminster" },
-];
+import { useStoredZones } from "@/hooks/useStoredZones";
+import { loadActiveZone, loadLocation } from "@/lib/storage";
 
 export default function ShiftPage() {
+  const { zones, isReady } = useStoredZones();
+  const [activeZone, setActiveZone] = useState("Hackney");
+  const [driverArea, setDriverArea] = useState("");
+
+  useEffect(() => {
+    setDriverArea(loadLocation());
+    setActiveZone(loadActiveZone() ?? zones[0]?.name ?? "Hackney");
+  }, [zones]);
+
+  const shiftEvents = useMemo(() => {
+    const topZones = zones.slice(0, 3);
+    return [
+      {
+        time: "20:12",
+        label: `Started shift near ${driverArea || "your area"}`,
+      },
+      {
+        time: "20:44",
+        label: topZones[1]
+          ? `Moved into ${topZones[1].name} demand pocket`
+          : "Monitoring nearby demand",
+      },
+      {
+        time: "21:18",
+        label: topZones[0]
+          ? `Best surge seen in ${topZones[0].name}`
+          : "Waiting for next surge window",
+      },
+    ];
+  }, [driverArea, zones]);
+
+  if (!isReady) {
+    return (
+      <main className="flex min-h-dvh items-center justify-center bg-[#0A0A0A] text-sm font-bold uppercase tracking-[0.14em] text-[#888888]">
+        Loading shift...
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-[#0A0A0A] px-5 pb-28 pt-8 text-white">
+    <main className="min-h-dvh bg-[#0A0A0A] px-5 pb-28 pt-safe text-white">
       <div className="mx-auto max-w-3xl">
-        <h1 className="mb-6 text-[32px] font-bold leading-tight tracking-[-0.05em] text-white">
+        <h1 className="mb-6 text-[28px] font-bold leading-tight tracking-[-0.05em] text-white">
           Live Shift
         </h1>
 
@@ -21,7 +57,7 @@ export default function ShiftPage() {
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Online
             </p>
-            <p className="text-4xl font-bold tracking-[-0.06em] text-white">
+            <p className="text-3xl font-bold tracking-[-0.06em] text-white sm:text-4xl">
               2h 34m
             </p>
           </div>
@@ -29,8 +65,8 @@ export default function ShiftPage() {
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#888888]">
               Current Zone
             </p>
-            <p className="text-4xl font-bold tracking-[-0.06em] text-[#F5A623]">
-              Hackney
+            <p className="text-2xl font-bold tracking-[-0.06em] text-[#F5A623] sm:text-3xl">
+              {activeZone}
             </p>
           </div>
         </section>
@@ -43,12 +79,14 @@ export default function ShiftPage() {
             </h2>
           </div>
           <div className="space-y-4">
-            {SHIFT_EVENTS.map((event) => (
+            {shiftEvents.map((event) => (
               <div
                 className="flex gap-4 border-b border-[#222222] pb-4 last:border-b-0 last:pb-0"
                 key={`${event.time}-${event.label}`}
               >
-                <span className="font-bold text-[#F5A623]">{event.time}</span>
+                <span className="shrink-0 font-bold text-[#F5A623]">
+                  {event.time}
+                </span>
                 <span className="font-medium text-[#888888]">{event.label}</span>
               </div>
             ))}

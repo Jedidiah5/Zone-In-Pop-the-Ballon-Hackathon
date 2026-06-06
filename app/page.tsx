@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import OnboardingScreen from "@/components/OnboardingScreen";
+import { getCurrentAreaName, getGeolocationErrorMessage } from "@/lib/geolocation";
+import { saveLocation } from "@/lib/storage";
 import type { Platform, Zone } from "@/types";
 
 type ZonesApiResponse = {
@@ -17,7 +19,23 @@ export default function OnboardingPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
   const [location, setLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
   const [error, setError] = useState("");
+
+  const handleUseCurrentLocation = async () => {
+    setError("");
+    setIsLocating(true);
+
+    try {
+      const area = await getCurrentAreaName();
+      setLocation(area);
+      saveLocation(area);
+    } catch (err) {
+      setError(getGeolocationErrorMessage(err));
+    } finally {
+      setIsLocating(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!selectedPlatform && !location.trim()) {
@@ -29,17 +47,12 @@ export default function OnboardingPage() {
       return;
     }
     if (!location.trim()) {
-      setError("Enter your current area, e.g. Shoreditch");
+      setError("Enter your area or tap Use My Current Location");
       return;
     }
 
     setError("");
     setIsLoading(true);
-
-    console.log("[ZoneIn] Calling /api/zones...", {
-      platform: selectedPlatform,
-      location: location.trim(),
-    });
 
     try {
       const response = await fetch("/api/zones", {
@@ -52,10 +65,6 @@ export default function OnboardingPage() {
       });
 
       const data = (await response.json()) as ZonesApiResponse | Zone[];
-
-      console.log("[ZoneIn] API response:", response.status, data);
-
-      // Support legacy array-only responses
       const zones = Array.isArray(data) ? data : data.zones;
       const source = Array.isArray(data) ? "unknown" : data.source;
       const reason = Array.isArray(data) ? undefined : data.reason;
@@ -72,12 +81,6 @@ export default function OnboardingPage() {
         throw new Error("No zones returned from API");
       }
 
-      if (source === "mock") {
-        console.warn("[ZoneIn] Using mock data — Gemini unavailable:", reason);
-      } else if (source === "gemini") {
-        console.log("[ZoneIn] Live Gemini results received");
-      }
-
       localStorage.setItem("zonein_results", JSON.stringify(zones));
       localStorage.setItem("zonein_platform", selectedPlatform);
       localStorage.setItem("zonein_location", location.trim());
@@ -90,7 +93,6 @@ export default function OnboardingPage() {
 
       router.push("/zones");
     } catch (err) {
-      console.error("[ZoneIn] API call failed:", err);
       setError(
         err instanceof Error ? err.message : "Something went wrong. Try again."
       );
@@ -103,10 +105,12 @@ export default function OnboardingPage() {
     <OnboardingScreen
       error={error}
       isLoading={isLoading}
+      isLocating={isLocating}
       location={location}
       onLocationChange={setLocation}
       onPlatformSelect={setSelectedPlatform}
       onSubmit={handleSubmit}
+      onUseCurrentLocation={handleUseCurrentLocation}
       selectedPlatform={selectedPlatform}
     />
   );

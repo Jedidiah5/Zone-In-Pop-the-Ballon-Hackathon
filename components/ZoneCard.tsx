@@ -85,7 +85,7 @@ export default function ZoneCard({ zone, id }: ZoneCardProps) {
       </div>
 
       <Link
-        className="flex h-11 w-full items-center justify-center rounded-md bg-[#F5A623] text-sm font-bold uppercase tracking-[1px] text-[#000000] hover:opacity-90"
+        className="flex h-11 w-full touch-manipulation items-center justify-center rounded-md bg-[#F5A623] text-sm font-bold uppercase tracking-[1px] text-[#000000] active:opacity-90"
         href={`/zones/${getZoneSlug(zone.name)}`}
       >
         HEAD HERE →
