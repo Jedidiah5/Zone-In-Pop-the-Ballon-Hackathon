@@ -145,8 +145,8 @@ export default function OnboardingWizard({
             className="object-cover"
             fill
             priority
+            sizes="(max-width: 1024px) 100vw, 42vw"
             src={STEP_IMAGES[step]}
-            unoptimized={step > 1}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F7F7F7] lg:bg-gradient-to-r lg:from-transparent lg:to-[#F7F7F7]/80" />
           <div className="absolute left-6 top-safe pt-4 text-xl font-bold tracking-[-0.04em] lg:left-8 lg:text-2xl">

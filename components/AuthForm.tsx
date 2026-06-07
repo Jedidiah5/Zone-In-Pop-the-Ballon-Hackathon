@@ -97,8 +97,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
           className="object-cover opacity-80"
           fill
           priority
+          sizes="50vw"
           src={APP_IMAGES.heroMap}
-          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-[#F7F7F7]/90" />
         <div className="relative z-10 flex h-full flex-col justify-between p-10">
@@ -124,8 +124,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
             className="object-cover opacity-70"
             fill
             priority
+            sizes="100vw"
             src={APP_IMAGES.heroMap}
-            unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F7F7F7]" />
           <div className="relative z-10 flex h-full items-center justify-center">

@@ -17,6 +17,7 @@ export default function ZoneInLogo({
       height={size}
       priority
       src={zoneInLogo}
+      unoptimized
       width={size}
     />
   );

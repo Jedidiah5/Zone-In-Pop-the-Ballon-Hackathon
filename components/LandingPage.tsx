@@ -13,21 +13,18 @@ const FEATURES = [
     title: "Live zone map",
     body: "See where demand is spiking across London right now.",
     image: APP_IMAGES.heroMap,
-    local: true,
   },
   {
     icon: TrendingUp,
     title: "Surge intel",
     body: "AI surge multipliers and job counts, updated every 2 minutes.",
-    image: APP_IMAGES.cityStreet,
-    local: false,
+    image: APP_IMAGES.surgeIntel,
   },
   {
     icon: Zap,
     title: "Head here fast",
     body: "One tap to open Google Maps to your best zone.",
     image: APP_IMAGES.driverPhone,
-    local: false,
   },
 ];
 
@@ -48,6 +45,7 @@ export default function LandingPage() {
             className="object-cover opacity-70"
             fill
             priority
+            sizes="100vw"
             src={APP_IMAGES.heroDriver}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-[#F7F7F7]" />
@@ -181,6 +179,7 @@ export default function LandingPage() {
               className="object-cover"
               fill
               priority
+              sizes="(max-width: 1280px) 50vw, 600px"
               src={APP_IMAGES.heroDriver}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent" />
@@ -208,8 +207,8 @@ export default function LandingPage() {
                       alt={feature.title}
                       className="object-cover"
                       fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       src={feature.image}
-                      unoptimized={!feature.local}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#F7F7F7] to-transparent" />
                   </div>

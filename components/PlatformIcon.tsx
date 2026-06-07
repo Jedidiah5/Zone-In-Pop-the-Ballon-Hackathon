@@ -22,7 +22,7 @@ export default function PlatformIcon({ platform, size = 40 }: PlatformIconProps)
 
   return (
     <div
-      className="pointer-events-none overflow-hidden rounded-lg bg-black"
+      className="pointer-events-none flex items-center justify-center overflow-hidden rounded-lg border border-[#E5E5E5] bg-white p-1.5"
       style={{ height: size, width: size }}
     >
       <Image
@@ -31,6 +31,7 @@ export default function PlatformIcon({ platform, size = 40 }: PlatformIconProps)
         className="h-full w-full object-contain"
         height={size}
         src={logo}
+        unoptimized
         width={size}
       />
     </div>
