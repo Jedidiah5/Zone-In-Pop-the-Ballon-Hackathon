@@ -22,13 +22,13 @@ export default function PlatformIcon({ platform, size = 40 }: PlatformIconProps)
 
   return (
     <div
-      className="pointer-events-none flex items-center justify-center overflow-hidden rounded-lg border border-[#E5E5E5] bg-white p-1.5"
+      className="pointer-events-none overflow-hidden rounded-lg bg-black"
       style={{ height: size, width: size }}
     >
       <Image
         alt=""
         aria-hidden="true"
-        className="h-full w-full object-contain"
+        className="h-full w-full object-cover"
         height={size}
         src={logo}
         unoptimized
