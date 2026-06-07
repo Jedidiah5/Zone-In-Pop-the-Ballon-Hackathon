@@ -1,9 +1,13 @@
+function toBase64Url(raw: string): string {
+  const base64 =
+    typeof Buffer !== "undefined"
+      ? Buffer.from(raw, "utf8").toString("base64")
+      : btoa(raw);
+
+  return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
 export function deriveDriverId(platform: string, location: string): string {
   const raw = `${platform.trim().toLowerCase()}:${location.trim().toLowerCase()}`;
-
-  if (typeof Buffer !== "undefined") {
-    return Buffer.from(raw, "utf8").toString("base64url");
-  }
-
-  return btoa(raw).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return toBase64Url(raw);
 }

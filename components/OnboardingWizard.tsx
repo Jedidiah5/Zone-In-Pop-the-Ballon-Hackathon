@@ -4,6 +4,7 @@ import Image from "next/image";
 import { LocateFixed, MapPin, User } from "lucide-react";
 import { useState } from "react";
 import PlatformSelector from "@/components/PlatformSelector";
+import VehicleTypeIcon from "@/components/VehicleTypeIcon";
 import { APP_IMAGES } from "@/lib/images";
 import type {
   OnboardingData,
@@ -12,11 +13,11 @@ import type {
   VehicleType,
 } from "@/types";
 
-const VEHICLES: { id: VehicleType; label: string; emoji: string }[] = [
-  { id: "car", label: "Car", emoji: "🚗" },
-  { id: "bike", label: "Bike", emoji: "🚲" },
-  { id: "scooter", label: "Scooter", emoji: "🛵" },
-  { id: "van", label: "Van", emoji: "🚐" },
+const VEHICLES: { id: VehicleType; label: string }[] = [
+  { id: "car", label: "Car" },
+  { id: "bike", label: "Bike" },
+  { id: "scooter", label: "Scooter" },
+  { id: "van", label: "Van" },
 ];
 
 const SHIFTS: { id: ShiftPreference; label: string; time: string }[] = [
@@ -288,7 +289,12 @@ export default function OnboardingWizard({
                       onClick={() => setVehicleType(vehicle.id)}
                       type="button"
                     >
-                      <span className="text-2xl">{vehicle.emoji}</span>
+                      <VehicleTypeIcon
+                        className={
+                          vehicleType === vehicle.id ? "text-black" : "text-[#666666]"
+                        }
+                        type={vehicle.id}
+                      />
                       {vehicle.label}
                     </button>
                   ))}
