@@ -4,6 +4,7 @@ import { ArrowLeft, Navigation } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "@/components/AppLayout";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useStoredZones } from "@/hooks/useStoredZones";
 import { updateProfile } from "@/lib/database";
 import { logShiftZoneChange } from "@/lib/shift";
@@ -70,11 +71,7 @@ export default function ZoneDetailPage() {
   };
 
   if (!isReady) {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
-        Loading zone...
-      </main>
-    );
+    return <LoadingScreen message="Loading zone..." />;
   }
 
   if (notFound || !zone) {

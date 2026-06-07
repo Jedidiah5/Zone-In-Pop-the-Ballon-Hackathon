@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 import OnboardingWizard from "@/components/OnboardingWizard";
 import { getProfile } from "@/lib/database";
 import { getCurrentAreaName, getGeolocationErrorMessage } from "@/lib/geolocation";
@@ -189,11 +190,7 @@ export default function OnboardingPage() {
   };
 
   if (!ready) {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold uppercase tracking-[0.14em] text-[#666666]">
-        Loading...
-      </main>
-    );
+    return <LoadingScreen />;
   }
 
   return (

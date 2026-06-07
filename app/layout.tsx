@@ -12,8 +12,9 @@ export const metadata: Metadata = {
   title: "ZoneIn",
   description: "Find the best zones for gig drivers",
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }],
+    shortcut: ["/icon.png"],
   },
 };
 

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AppLayout from "@/components/AppLayout";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useShiftTimer } from "@/hooks/useShiftTimer";
 import { getProfile } from "@/lib/database";
 import {
@@ -63,11 +64,7 @@ export default function ShiftPage() {
   };
 
   if (!ready) {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
-        Loading shift...
-      </main>
-    );
+    return <LoadingScreen message="Loading shift..." />;
   }
 
   return (

@@ -1,5 +1,4 @@
 import MaterialIcon from "./MaterialIcon";
-import ZoneInLogo from "./ZoneInLogo";
 
 type AppHeaderProps = {
   variant?: "onboarding" | "app";
@@ -13,12 +12,9 @@ export default function AppHeader({
   if (variant === "onboarding") {
     return (
       <header className="sticky top-0 z-40 flex h-14 w-full items-center justify-between border-b border-primary-container bg-primary px-container-padding lg:h-16 lg:px-8">
-        <div className="flex items-center gap-2">
-          <ZoneInLogo className="h-8 w-8 rounded-full" size={32} />
-          <span className="font-headline-md-mobile text-headline-md-mobile font-bold tracking-tighter text-on-primary">
-            ZoneIn
-          </span>
-        </div>
+        <span className="font-headline-md-mobile text-headline-md-mobile font-bold tracking-tighter text-on-primary">
+          ZoneIn
+        </span>
         <button
           aria-label="Menu"
           className="text-on-primary transition-transform active:scale-95"

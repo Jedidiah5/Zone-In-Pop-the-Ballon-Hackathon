@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import AppLayout from "@/components/AppLayout";
+import LoadingScreen from "@/components/LoadingScreen";
 import BottomSheet from "@/components/BottomSheet";
 import PaywallModal from "@/components/PaywallModal";
 import ZoneCard from "@/components/ZoneCard";
@@ -19,9 +20,7 @@ import {
 const DynamicZonesMap = dynamic(() => import("@/components/ZonesMap"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full items-center justify-center text-sm font-bold text-[#666666]">
-      Loading London map...
-    </div>
+    <LoadingScreen compact message="Loading London map..." />
   ),
 });
 
@@ -148,11 +147,7 @@ function ZonesPageContent() {
   );
 
   if (!isReady || !hasSearch || !paywallReady) {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
-        Loading zones...
-      </main>
-    );
+    return <LoadingScreen message="Loading zones..." />;
   }
 
   return (
@@ -279,13 +274,7 @@ function ZonesPageContent() {
 
 export default function ZonesPage() {
   return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-dvh items-center justify-center bg-white text-sm font-bold text-[#666666]">
-          Loading zones...
-        </main>
-      }
-    >
+    <Suspense fallback={<LoadingScreen message="Loading zones..." />}>
       <ZonesPageContent />
     </Suspense>
   );
